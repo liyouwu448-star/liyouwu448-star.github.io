@@ -550,6 +550,26 @@ body.chat-active #view-chat{padding:0!important}
 .chat-typing span:nth-child(3){animation-delay:.4s}
 @keyframes typing{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
+/* 流式输出光标 */
+.stream-cursor{display:inline-block;width:2px;height:14px;background:var(--gold);animation:blink 1s infinite;vertical-align:middle;margin-left:2px}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* TTS 朗读控制条 */
+.tts-bar{display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:6px;border-top:1px solid var(--border);flex-wrap:wrap}
+.tts-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);font-size:11px;cursor:pointer;transition:.15s}
+.tts-btn:hover{border-color:var(--gold);color:var(--gold)}
+.tts-btn.active{background:var(--gold-glow);border-color:var(--gold);color:var(--gold)}
+.tts-btn svg{width:13px;height:13px}
+.tts-engine-toggle{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dim);margin-left:auto}
+.tts-engine-toggle select{background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);border-radius:4px;padding:2px 4px;font-size:10px;cursor:pointer}
+
+/* 派单提示条 */
+.dispatch-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-2);border:1px solid var(--gold);border-radius:10px;padding:10px 18px;display:flex;align-items:center;gap:10px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastIn .3s ease;max-width:90vw}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.dispatch-toast-icon{font-size:16px}
+.dispatch-toast-text{font-size:13px;color:var(--text)}
+.dispatch-toast-action{background:var(--gold);color:#1a1a24;border:none;padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+
 /* ===== REPLICATE ===== */
 .replicate-spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border-l);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -1176,7 +1196,7 @@ body.chat-active #view-chat{padding:0!important}
         <div id="chatMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:4px 0 8px;min-height:200px">
           <div class="chat-msg bot">
             <div class="chat-msg-bubble" style="background:transparent;border:none">
-              <div class="chat-msg-text" style="color:var(--text-dim);font-size:14px;line-height:1.8">你好，我是AI创作助手。<span id="chatKeyTip">配置密钥后即可开始对话 👇</span></div>
+              <div class="chat-msg-text" style="color:var(--text-dim);font-size:14px;line-height:1.8">你好，我是AI创作助手。支持流式对话、语音朗读、智能派单。<span id="chatKeyTip">配置密钥后即可开始对话 👇</span><br><br>💡 试试输入：<span style="color:var(--gold);cursor:pointer" onclick="document.getElementById('chatInput').value='帮我新建一个修仙漫剧项目';sendChat()">"帮我新建一个修仙漫剧项目"</span>（自动派单跳转）</div>
               <div id="chatKeyQuick" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
                 <button onclick="quickSetKey('siliconflow')" style="background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#1a1a24;border:none;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
                   🔑 配置硅基流动密钥（推荐·免费额度）
@@ -2582,6 +2602,9 @@ async function sendChat(){
   const text=input.value.trim();
   if(!text)return;
   
+  // ===== 派单模式：检测指令并自动跳转 =====
+  var dispatchResult=detectDispatchIntent(text);
+  
   addUserMsg(text);
   input.value='';
   input.style.height='44px';
@@ -2593,7 +2616,6 @@ async function sendChat(){
   var modelName='';
   
   if(chatModelSelection==='auto'){
-    // Auto 模式：使用设置中配置的密钥和模型
     var keys={};
     try{keys=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
     if(keys.llm&&keys.llm.key&&keys.llm.provider){
@@ -2603,10 +2625,9 @@ async function sendChat(){
       modelName=keys.llm.model||(p?p.defaultModel:'');
     }
   }else{
-    // 手动选择：解析 provider:model
     var parts=chatModelSelection.split(':');
     var provider=parts[0];
-    var model=parts.slice(1).join(':'); // 处理 model id 中含 : 的情况
+    var model=parts.slice(1).join(':');
     var key=getProviderKey(provider);
     if(key){
       llmConfig={provider:provider,key:key,model:model};
@@ -2617,28 +2638,41 @@ async function sendChat(){
   }
   
   if(llmConfig){
-    // 调用真实AI API
     try{
       var systemPrompt=CHAT_SYSTEM_PROMPTS[chatMode]||CHAT_SYSTEM_PROMPTS.creative;
       var messages=[{role:'system',content:systemPrompt}];
-      // 加入历史对话（最多保留最近20条）
       var recentHistory=chatHistory.slice(-20);
       messages=messages.concat(recentHistory);
       messages.push({role:'user',content:text});
       
-      var reply=await callLLM(messages,llmConfig);
-      
+      // ===== 流式输出 =====
       removeTyping();
-      // 显示回复时标注使用的模型
+      var msgEl=createStreamingBotMsg();
+      var fullReply='';
+      var firstChunk=true;
+      
+      await callLLMStream(messages,llmConfig,function(chunk){
+        if(firstChunk){
+          firstChunk=false;
+        }
+        fullReply+=chunk;
+        updateStreamingMsg(msgEl,fullReply);
+      });
+      
+      // 流式结束，添加模型标签和朗读控制
       var modelTag=chatModelSelection==='auto'?'':'\n\n---\n💬 '+providerName+' / '+modelName;
-      addBotMsg(reply+modelTag);
+      finalizeStreamingMsg(msgEl,fullReply+modelTag);
       
       // 保存对话历史
       chatHistory.push({role:'user',content:text});
-      chatHistory.push({role:'assistant',content:reply});
-      // 限制历史长度
+      chatHistory.push({role:'assistant',content:fullReply});
       if(chatHistory.length>40)chatHistory=chatHistory.slice(-40);
       saveChatHistory();
+      
+      // 派单跳转
+      if(dispatchResult){
+        showDispatchToast(dispatchResult);
+      }
     }catch(e){
       removeTyping();
       var errMsg='❌ API调用失败 ('+providerName+' / '+modelName+')\n\n';
@@ -2650,7 +2684,6 @@ async function sendChat(){
       addBotMsg(errMsg);
     }
   }else{
-    // 未配置密钥
     removeTyping();
     if(chatModelSelection==='auto'){
       addBotMsg('⚠️ 尚未配置 AI 密钥，无法对话。\n\n请先到「设置 → 密钥管理」配置 LLM 服务商和 API Key，推荐使用硅基流动（注册送额度，支持浏览器直接调用）。\n\n配置完成后即可与 AI 实时对话。');
@@ -2658,6 +2691,432 @@ async function sendChat(){
       addBotMsg('⚠️ 未找到「'+providerName+'」的 API 密钥。\n\n请先到「设置 → 密钥管理」配置该服务商的密钥，或在模型选择器中切换到已配置的服务商。\n\n💡 提示：设置中配置的任何服务商密钥，都可以在聊天中直接切换使用。');
     }
   }
+}
+
+// ===== 派单意图检测 =====
+function detectDispatchIntent(text){
+  var t=text.toLowerCase();
+  var rules=[
+    {keywords:['新建','创建','开个','新建项目','开始一个'],view:'newproject',label:'新建项目',icon:'✨'},
+    {keywords:['2d','国漫','2d国漫','漫画工作流'],view:'workflow-manga',label:'2D国漫工作流',icon:'📚'},
+    {keywords:['3d','sss','3d国漫','三维'],view:'workflow-3d',label:'SSS级3D国漫',icon:'🎮'},
+    {keywords:['真人','短剧','实拍'],view:'workflow-live',label:'AI真人短剧',icon:'🎬'},
+    {keywords:['连载','100集','长篇','批量','多集'],view:'serial',label:'长篇连载生产线',icon:'📖'},
+    {keywords:['派单','分配','调度','自动调度','auto派'],view:'autodispatch',label:'Auto派单中心',icon:'🤖'},
+    {keywords:['营销','推广','宣发'],view:'marketing',label:'营销团队',icon:'📢'},
+    {keywords:['角色','角色库','人物资产','角色资产'],view:'character-lib',label:'角色资产库',icon:'👤'},
+    {keywords:['管线','生产管线','九阶段'],view:'pipeline',label:'生产管线',icon:'⚙️'},
+    {keywords:['资产','资产库','素材'],view:'assets',label:'资产库',icon:'📦'},
+    {keywords:['灵感','创意','题材'],view:'inspire',label:'灵感库',icon:'💡'},
+    {keywords:['复刻','视频复刻'],view:'replicate',label:'视频复刻',icon:'🔄'},
+    {keywords:['设置','密钥','配置','api'],view:'settings',label:'引擎设置',icon:'⚙️'},
+  ];
+  for(var i=0;i<rules.length;i++){
+    for(var j=0;j<rules[i].keywords.length;j++){
+      if(t.indexOf(rules[i].keywords[j])>=0){
+        return rules[i];
+      }
+    }
+  }
+  return null;
+}
+
+// 派单提示条
+var dispatchToastTimer=null;
+function showDispatchToast(info){
+  var existing=document.querySelector('.dispatch-toast');
+  if(existing)existing.remove();
+  if(dispatchToastTimer)clearTimeout(dispatchToastTimer);
+  
+  var toast=document.createElement('div');
+  toast.className='dispatch-toast';
+  toast.innerHTML='<span class="dispatch-toast-icon">'+info.icon+'</span>'+
+    '<span class="dispatch-toast-text">正在切换到「'+info.label+'」</span>'+
+    '<button class="dispatch-toast-action" onclick="switchView(\''+info.view+'\');dismissDispatchToast()">立即前往</button>';
+  document.body.appendChild(toast);
+  
+  // 1.5秒后自动跳转
+  dispatchToastTimer=setTimeout(function(){
+    dismissDispatchToast();
+    switchView(info.view);
+  },1500);
+}
+function dismissDispatchToast(){
+  var t=document.querySelector('.dispatch-toast');
+  if(t)t.remove();
+  if(dispatchToastTimer){clearTimeout(dispatchToastTimer);dispatchToastTimer=null;}
+}
+
+// ===== 流式调用LLM API =====
+async function callLLMStream(messages,llmConfig,onChunk){
+  var config=LLM_PROVIDERS[llmConfig.provider];
+  if(!config)throw new Error('未知的服务商：'+llmConfig.provider);
+  var model=llmConfig.model||config.defaultModel;
+  
+  if(llmConfig.provider==='anthropic'){
+    // Anthropic 流式
+    var systemContent='';
+    var chatMessages=[];
+    for(var i=0;i<messages.length;i++){
+      if(messages[i].role==='system'){
+        systemContent+=messages[i].content+'\n';
+      }else{
+        chatMessages.push({role:messages[i].role,content:messages[i].content});
+      }
+    }
+    var resp=await fetch(config.base,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':llmConfig.key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:model,max_tokens:2048,system:systemContent||undefined,messages:chatMessages,stream:true})
+    });
+    if(!resp.ok){
+      var errText=await resp.text();
+      var errObj={};try{errObj=JSON.parse(errText);}catch(e){}
+      throw new Error(errObj.error?.message||('HTTP '+resp.status+': '+errText.substring(0,300)));
+    }
+    var reader=resp.body.getReader();
+    var decoder=new TextDecoder();
+    var buffer='';
+    while(true){
+      var result=await reader.read();
+      if(result.done)break;
+      buffer+=decoder.decode(result.value,{stream:true});
+      var lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(var li=0;li<lines.length;li++){
+        var line=lines[li].trim();
+        if(line.startsWith('data:')){
+          var dataStr=line.slice(5).trim();
+          if(dataStr==='[DONE]')return;
+          try{
+            var data=JSON.parse(dataStr);
+            if(data.type==='content_block_delta'&&data.delta&&data.delta.text){
+              onChunk(data.delta.text);
+            }
+          }catch(e){}
+        }
+      }
+    }
+  }else{
+    // OpenAI兼容格式流式
+    var resp=await fetch(config.base,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+llmConfig.key
+      },
+      body:JSON.stringify({model:model,messages:messages,max_tokens:2048,temperature:0.8,stream:true})
+    });
+    if(!resp.ok){
+      var errText=await resp.text();
+      var errObj={};try{errObj=JSON.parse(errText);}catch(e){}
+      throw new Error(errObj.error?.message||('HTTP '+resp.status+': '+errText.substring(0,300)));
+    }
+    var reader=resp.body.getReader();
+    var decoder=new TextDecoder();
+    var buffer='';
+    while(true){
+      var result=await reader.read();
+      if(result.done)break;
+      buffer+=decoder.decode(result.value,{stream:true});
+      var lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(var li=0;li<lines.length;li++){
+        var line=lines[li].trim();
+        if(line.startsWith('data:')){
+          var dataStr=line.slice(5).trim();
+          if(dataStr==='[DONE]')return;
+          try{
+            var data=JSON.parse(dataStr);
+            if(data.choices&&data.choices[0]&&data.choices[0].delta&&data.choices[0].delta.content){
+              onChunk(data.choices[0].delta.content);
+            }
+          }catch(e){}
+        }
+      }
+    }
+  }
+}
+
+// ===== 流式消息DOM =====
+function createStreamingBotMsg(){
+  const c=document.getElementById('chatMessages');
+  const div=document.createElement('div');
+  div.className='chat-msg bot';
+  div.innerHTML='<div class="chat-msg-bubble"><div class="chat-msg-text"><span class="stream-cursor"></span></div></div>';
+  c.appendChild(div);
+  c.scrollTop=c.scrollHeight;
+  return div.querySelector('.chat-msg-text');
+}
+
+function updateStreamingMsg(textEl,text){
+  textEl.innerHTML=text.replace(/\n/g,'<br>')+'<span class="stream-cursor"></span>';
+  var c=document.getElementById('chatMessages');
+  c.scrollTop=c.scrollHeight;
+}
+
+function finalizeStreamingMsg(textEl,text){
+  var msgId='msg-'+Date.now();
+  textEl.parentElement.parentElement.setAttribute('data-msg-id',msgId);
+  textEl.innerHTML=text.replace(/\n/g,'<br>');
+  // 添加朗读控制条
+  var bubble=textEl.parentElement;
+  var ttsBar=document.createElement('div');
+  ttsBar.className='tts-bar';
+  ttsBar.innerHTML=
+    '<button class="tts-btn" onclick="ttsPlay(\''+msgId+'\')" title="朗读"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>朗读</button>'+
+    '<button class="tts-btn" id="ttsPause-'+msgId+'" onclick="ttsPause(\''+msgId+'\')" style="display:none" title="暂停"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>暂停</button>'+
+    '<button class="tts-btn" id="ttsResume-'+msgId+'" onclick="ttsResume(\''+msgId+'\')" style="display:none" title="继续"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>继续</button>'+
+    '<button class="tts-btn" id="ttsStop-'+msgId+'" onclick="ttsStop(\''+msgId+'\')" style="display:none" title="停止"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>停止</button>'+
+    '<div class="tts-engine-toggle">引擎'+
+    '<select id="ttsEngine-'+msgId+'" onchange="ttsEngineChange(\''+msgId+'\')">'+
+    '<option value="free">免费</option>'+
+    '<option value="doubao">豆包</option>'+
+    '</select></div>';
+  bubble.appendChild(ttsBar);
+  var c=document.getElementById('chatMessages');
+  c.scrollTop=c.scrollHeight;
+}
+
+// ===== TTS 朗读功能 =====
+var ttsEngine='free'; // 'free' 或 'doubao'
+var ttsCurrentMsgId=null;
+var ttsUtterance=null;
+var ttsPaused=false;
+
+function ttsEngineChange(msgId){
+  var sel=document.getElementById('ttsEngine-'+msgId);
+  if(sel)ttsEngine=sel.value;
+}
+
+// 获取消息纯文本
+function getMsgText(msgId){
+  var el=document.querySelector('[data-msg-id="'+msgId+'"] .chat-msg-text');
+  if(!el)return '';
+  return el.textContent||'';
+}
+
+// 免费TTS朗读
+function ttsPlay(msgId){
+  ttsStop(msgId);
+  ttsCurrentMsgId=msgId;
+  var text=getMsgText(msgId);
+  if(!text)return;
+  
+  var engineSel=document.getElementById('ttsEngine-'+msgId);
+  var engine=engineSel?engineSel.value:ttsEngine;
+  
+  if(engine==='doubao'){
+    ttsPlayDoubao(msgId,text);
+  }else{
+    ttsPlayFree(msgId,text);
+  }
+}
+
+function ttsPlayFree(msgId,text){
+  if(!('speechSynthesis'in window)){
+    addBotMsg('⚠️ 当前浏览器不支持语音朗读功能。');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  ttsUtterance=new SpeechSynthesisUtterance(text);
+  ttsUtterance.lang='zh-CN';
+  ttsUtterance.rate=1.0;
+  ttsUtterance.pitch=1.0;
+  
+  // 尝试使用中文语音
+  var voices=window.speechSynthesis.getVoices();
+  var zhVoice=null;
+  for(var i=0;i<voices.length;i++){
+    if(voices[i].lang.indexOf('zh')>=0){
+      zhVoice=voices[i];
+      break;
+    }
+  }
+  if(zhVoice)ttsUtterance.voice=zhVoice;
+  
+  ttsUtterance.onend=function(){
+    ttsResetUI(msgId);
+  };
+  ttsUtterance.onerror=function(){
+    ttsResetUI(msgId);
+  };
+  
+  window.speechSynthesis.speak(ttsUtterance);
+  ttsPaused=false;
+  ttsShowPlayingUI(msgId);
+}
+
+// 豆包TTS朗读
+async function ttsPlayDoubao(msgId,text){
+  var keys={};
+  try{keys=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
+  
+  if(!keys.doubao_tts||!keys.doubao_tts.key){
+    // 没有豆包TTS密钥，回退到免费
+    addBotMsg('⚠️ 未配置豆包TTS密钥，已自动切换到免费朗读引擎。\n\n如需使用豆包优质语音，请在「设置 → 密钥管理」中配置火山引擎TTS密钥。');
+    var engineSel=document.getElementById('ttsEngine-'+msgId);
+    if(engineSel)engineSel.value='free';
+    ttsPlayFree(msgId,text);
+    return;
+  }
+  
+  ttsShowPlayingUI(msgId);
+  var audioEl=document.getElementById('ttsAudio-'+msgId);
+  if(!audioEl){
+    audioEl=document.createElement('audio');
+    audioEl.id='ttsAudio-'+msgId;
+    audioEl.style.display='none';
+    document.body.appendChild(audioEl);
+  }
+  
+  try{
+    // 分段处理（豆包TTS单次限制）
+    var segments=ttsSplitText(text,500);
+    var allBlobs=[];
+    for(var i=0;i<segments.length;i++){
+      var blob=await ttsDoubaoSegment(keys.doubao_tts,segments[i]);
+      allBlobs.push(blob);
+    }
+    var fullBlob=new Blob(allBlobs,{type:'audio/mp3'});
+    audioEl.src=URL.createObjectURL(fullBlob);
+    audioEl.onended=function(){
+      ttsResetUI(msgId);
+    };
+    audioEl.play();
+  }catch(e){
+    addBotMsg('⚠️ 豆包TTS调用失败：'+(e.message||'未知错误')+'\n\n已自动切换到免费朗读引擎。');
+    var engineSel=document.getElementById('ttsEngine-'+msgId);
+    if(engineSel)engineSel.value='free';
+    ttsPlayFree(msgId,text);
+  }
+}
+
+async function ttsDoubaoSegment(config,text){
+  var resp=await fetch('https://openspeech.bytedance.com/api/v1/tts',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer;'+config.key,
+      'X-Api-App-Key':config.appid||config.key,
+      'X-Api-Resource-Id':'volc.megatts.tts'
+    },
+    body:JSON.stringify({
+      app:{appid:config.appid||'',token:config.key,cluster:config.cluster||'volcano_tts'},
+      user:{uid:'manga_agent'},
+      audio:{voice_type:config.voice||'zh_female_tianmei',encoding:'mp3',speed_ratio:1.0},
+      request:{reqid:Date.now()+''+Math.random(),text:text,operation:'query'}
+    })
+  });
+  if(!resp.ok)throw new Error('HTTP '+resp.status);
+  var data=await resp.json();
+  if(data.code!==3000)throw new Error(data.message||'TTS错误');
+  var binaryStr=atob(data.data);
+  var bytes=new Uint8Array(binaryStr.length);
+  for(var i=0;i<binaryStr.length;i++)bytes[i]=binaryStr.charCodeAt(i);
+  return new Blob([bytes],{type:'audio/mp3'});
+}
+
+function ttsSplitText(text,maxLen){
+  var segments=[];
+  var current='';
+  var sentences=text.split(/[。！？\n.!?]/);
+  for(var i=0;i<sentences.length;i++){
+    if((current+sentences[i]).length>maxLen){
+      if(current)segments.push(current);
+      current=sentences[i];
+    }else{
+      current+=sentences[i]+'。';
+    }
+  }
+  if(current)segments.push(current);
+  return segments;
+}
+
+function ttsPause(msgId){
+  var engineSel=document.getElementById('ttsEngine-'+msgId);
+  var engine=engineSel?engineSel.value:ttsEngine;
+  
+  if(engine==='doubao'){
+    var audioEl=document.getElementById('ttsAudio-'+msgId);
+    if(audioEl&&audioEl.pause){
+      audioEl.pause();
+      ttsPaused=true;
+      document.getElementById('ttsPause-'+msgId).style.display='none';
+      var r=document.getElementById('ttsResume-'+msgId);
+      if(r)r.style.display='flex';
+    }
+  }else{
+    if(window.speechSynthesis){
+      window.speechSynthesis.pause();
+      ttsPaused=true;
+      document.getElementById('ttsPause-'+msgId).style.display='none';
+      var r=document.getElementById('ttsResume-'+msgId);
+      if(r)r.style.display='flex';
+    }
+  }
+}
+
+function ttsResume(msgId){
+  var engineSel=document.getElementById('ttsEngine-'+msgId);
+  var engine=engineSel?engineSel.value:ttsEngine;
+  
+  if(engine==='doubao'){
+    var audioEl=document.getElementById('ttsAudio-'+msgId);
+    if(audioEl&&audioEl.play){
+      audioEl.play();
+      ttsPaused=false;
+      document.getElementById('ttsResume-'+msgId).style.display='none';
+      var p=document.getElementById('ttsPause-'+msgId);
+      if(p)p.style.display='flex';
+    }
+  }else{
+    if(window.speechSynthesis){
+      window.speechSynthesis.resume();
+      ttsPaused=false;
+      document.getElementById('ttsResume-'+msgId).style.display='none';
+      var p=document.getElementById('ttsPause-'+msgId);
+      if(p)p.style.display='flex';
+    }
+  }
+}
+
+function ttsStop(msgId){
+  if(window.speechSynthesis)window.speechSynthesis.cancel();
+  var audioEl=document.getElementById('ttsAudio-'+msgId);
+  if(audioEl){
+    audioEl.pause();
+    audioEl.src='';
+  }
+  ttsPaused=false;
+  if(msgId)ttsResetUI(msgId);
+}
+
+function ttsShowPlayingUI(msgId){
+  var play=document.getElementById('ttsPause-'+msgId);
+  if(play)play.style.display='flex';
+  var stop=document.getElementById('ttsStop-'+msgId);
+  if(stop)stop.style.display='flex';
+  var playBtn=document.querySelector('[data-msg-id="'+msgId+'"] .tts-btn:first-child');
+  if(playBtn)playBtn.classList.add('active');
+}
+
+function ttsResetUI(msgId){
+  var pause=document.getElementById('ttsPause-'+msgId);
+  if(pause)pause.style.display='none';
+  var resume=document.getElementById('ttsResume-'+msgId);
+  if(resume)resume.style.display='none';
+  var stop=document.getElementById('ttsStop-'+msgId);
+  if(stop)stop.style.display='none';
+  var playBtn=document.querySelector('[data-msg-id="'+msgId+'"] .tts-btn:first-child');
+  if(playBtn)playBtn.classList.remove('active');
+  ttsCurrentMsgId=null;
+  ttsPaused=false;
 }
 
 // 真实调用LLM API
