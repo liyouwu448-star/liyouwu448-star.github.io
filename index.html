@@ -2661,7 +2661,7 @@ async function sendChat(){
       
       // 流式结束，添加模型标签和朗读控制
       var modelTag=chatModelSelection==='auto'?'':'\n\n---\n💬 '+providerName+' / '+modelName;
-      finalizeStreamingMsg(msgEl,fullReply+modelTag);
+      var msgId=finalizeStreamingMsg(msgEl,fullReply+modelTag);
       
       // 保存对话历史
       chatHistory.push({role:'user',content:text});
@@ -2669,7 +2669,10 @@ async function sendChat(){
       if(chatHistory.length>40)chatHistory=chatHistory.slice(-40);
       saveChatHistory();
       
-      // 派单跳转
+      // 自动朗读
+      setTimeout(function(){ttsPlay(msgId);},300);
+      
+      // 派单提示（需用户确认，不自动跳转）
       if(dispatchResult){
         showDispatchToast(dispatchResult);
       }
@@ -2721,7 +2724,7 @@ function detectDispatchIntent(text){
   return null;
 }
 
-// 派单提示条
+// 派单提示条（需用户确认，不自动跳转）
 var dispatchToastTimer=null;
 function showDispatchToast(info){
   var existing=document.querySelector('.dispatch-toast');
@@ -2731,15 +2734,10 @@ function showDispatchToast(info){
   var toast=document.createElement('div');
   toast.className='dispatch-toast';
   toast.innerHTML='<span class="dispatch-toast-icon">'+info.icon+'</span>'+
-    '<span class="dispatch-toast-text">正在切换到「'+info.label+'」</span>'+
-    '<button class="dispatch-toast-action" onclick="switchView(\''+info.view+'\');dismissDispatchToast()">立即前往</button>';
+    '<span class="dispatch-toast-text">检测到指令，是否切换到「'+info.label+'」？</span>'+
+    '<button class="dispatch-toast-action" onclick="switchView(\''+info.view+'\');dismissDispatchToast()">确认前往</button>'+
+    '<button class="dispatch-toast-cancel" onclick="dismissDispatchToast()" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap">取消</button>';
   document.body.appendChild(toast);
-  
-  // 1.5秒后自动跳转
-  dispatchToastTimer=setTimeout(function(){
-    dismissDispatchToast();
-    switchView(info.view);
-  },1500);
 }
 function dismissDispatchToast(){
   var t=document.querySelector('.dispatch-toast');
@@ -2869,7 +2867,7 @@ function finalizeStreamingMsg(textEl,text){
   var ttsBar=document.createElement('div');
   ttsBar.className='tts-bar';
   ttsBar.innerHTML=
-    '<button class="tts-btn" onclick="ttsPlay(\''+msgId+'\')" title="朗读"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>朗读</button>'+
+    '<button class="tts-btn" id="ttsPlay-'+msgId+'" onclick="ttsPlay(\''+msgId+'\')" title="朗读"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>朗读</button>'+
     '<button class="tts-btn" id="ttsPause-'+msgId+'" onclick="ttsPause(\''+msgId+'\')" style="display:none" title="暂停"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>暂停</button>'+
     '<button class="tts-btn" id="ttsResume-'+msgId+'" onclick="ttsResume(\''+msgId+'\')" style="display:none" title="继续"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>继续</button>'+
     '<button class="tts-btn" id="ttsStop-'+msgId+'" onclick="ttsStop(\''+msgId+'\')" style="display:none" title="停止"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>停止</button>'+
@@ -2881,6 +2879,7 @@ function finalizeStreamingMsg(textEl,text){
   bubble.appendChild(ttsBar);
   var c=document.getElementById('chatMessages');
   c.scrollTop=c.scrollHeight;
+  return msgId;
 }
 
 // ===== TTS 朗读功能 =====
@@ -3098,23 +3097,23 @@ function ttsStop(msgId){
 }
 
 function ttsShowPlayingUI(msgId){
-  var play=document.getElementById('ttsPause-'+msgId);
-  if(play)play.style.display='flex';
+  var playBtn=document.getElementById('ttsPlay-'+msgId);
+  if(playBtn)playBtn.style.display='none';
+  var pause=document.getElementById('ttsPause-'+msgId);
+  if(pause)pause.style.display='flex';
   var stop=document.getElementById('ttsStop-'+msgId);
   if(stop)stop.style.display='flex';
-  var playBtn=document.querySelector('[data-msg-id="'+msgId+'"] .tts-btn:first-child');
-  if(playBtn)playBtn.classList.add('active');
 }
 
 function ttsResetUI(msgId){
+  var playBtn=document.getElementById('ttsPlay-'+msgId);
+  if(playBtn)playBtn.style.display='flex';
   var pause=document.getElementById('ttsPause-'+msgId);
   if(pause)pause.style.display='none';
   var resume=document.getElementById('ttsResume-'+msgId);
   if(resume)resume.style.display='none';
   var stop=document.getElementById('ttsStop-'+msgId);
   if(stop)stop.style.display='none';
-  var playBtn=document.querySelector('[data-msg-id="'+msgId+'"] .tts-btn:first-child');
-  if(playBtn)playBtn.classList.remove('active');
   ttsCurrentMsgId=null;
   ttsPaused=false;
 }
