@@ -1,0 +1,44 @@
+{
+  "name": "漫剧智能体 - AI Manga Agent",
+  "short_name": "漫剧AI",
+  "description": "AI漫剧全自动生产智能体工作流平台 - 从小说到成片全链路自动化",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0f",
+  "theme_color": "#d4a843",
+  "lang": "zh-CN",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%230a0a0f'/%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle' fill='%23d4a843' font-family='sans-serif' font-weight='bold'%3E葫%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230a0a0f'/%3E%3Ctext x='256' y='340' font-size='260' text-anchor='middle' fill='%23d4a843' font-family='sans-serif' font-weight='bold'%3E葫%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "entertainment", "business"],
+  "shortcuts": [
+    {
+      "name": "AI聊天",
+      "url": "./index.html#chat",
+      "description": "与AI创作助手对话"
+    },
+    {
+      "name": "新建项目",
+      "url": "./index.html#newproject",
+      "description": "创建新的漫剧项目"
+    },
+    {
+      "name": "工作台",
+      "url": "./index.html#workspace",
+      "description": "项目工作台"
+    }
+  ]
+}
