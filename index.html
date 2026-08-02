@@ -442,6 +442,12 @@ input,textarea,select{font-family:inherit}
   .sidebar{display:none}
   .bottom-nav{display:flex}
   .main-content{padding-bottom:calc(var(--bottom-h) + 12px)}
+  /* 聊天视图：隐藏底部导航，输入框贴底 */
+  body.chat-active .bottom-nav{display:none!important}
+  body.chat-active .main-content{padding-bottom:0!important}
+  body.chat-active #view-chat{padding:0!important}
+  body.chat-active .more-overlay,
+  body.chat-active .more-menu{display:none!important}
   .view{padding:14px}
   .ws-grid{grid-template-columns:1fr}
   .stage-detail-grid{grid-template-columns:1fr}
@@ -466,27 +472,33 @@ input,textarea,select{font-family:inherit}
   .pipe-stage-name{font-size:13px}
   .ws-hero-stats{gap:16px}
   .ws-stat-num{font-size:18px}
-  .chat-model-select{max-width:90px;font-size:11px}
+  .chat-model-select{max-width:48px;font-size:10px}
 }
 
 /* ===== CHAT ===== */
+#view-chat{display:none}
+#view-chat.active{display:flex;flex-direction:column;height:calc(100vh - 100px)}
+@media(max-width:768px){
+  #view-chat.active{height:calc(100vh - 60px)}
+}
+body.chat-active #view-chat{padding:0!important}
 .chat-quick-btn{background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-mid);padding:6px 14px;border-radius:999px;font-size:12px;transition:.15s;white-space:nowrap}
 .chat-quick-btn:hover{border-color:var(--gold);color:var(--gold)}
-.chat-input-bar{display:flex;gap:6px;align-items:flex-end;padding:10px 0 0;flex-wrap:nowrap}
+.chat-input-bar{display:flex;gap:4px;align-items:flex-end;padding:6px 0 0;flex-wrap:nowrap}
 .chat-model-wrap{flex-shrink:0;position:relative}
 .chat-model-select{
   background:transparent;border:none;color:var(--text-dim);
-  padding:0 4px;height:36px;border-radius:8px;font-size:11px;font-weight:500;
+  padding:0 2px;height:32px;border-radius:6px;font-size:10px;font-weight:500;
   cursor:pointer;appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%235a5a72' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 2px center;
-  padding-right:12px;max-width:68px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 24 24' fill='none' stroke='%235a5a72' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 0 center;
+  padding-right:10px;max-width:52px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.chat-model-select:hover{color:var(--gold);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%23d4a843' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
+.chat-model-select:hover{color:var(--gold);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 24 24' fill='none' stroke='%23d4a843' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
 .chat-model-select:focus{outline:none}
 .chat-model-select optgroup{background:var(--bg-2);color:var(--text-dim);font-size:10px;font-weight:600}
 .chat-model-select option{background:var(--bg-2);color:var(--text);padding:4px;font-size:12px}
-.chat-plus-btn{width:36px;height:36px;border-radius:10px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:.15s;font-size:18px;font-weight:300}
+.chat-plus-btn{width:32px;height:32px;border-radius:8px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:.15s;font-size:16px;font-weight:300}
 .chat-plus-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--bg-2)}
 /* 聊天顶部工具栏 */
 .chat-topbar{display:flex;align-items:center;gap:8px;padding:8px 4px;margin-bottom:12px}
@@ -1188,7 +1200,7 @@ input,textarea,select{font-family:inherit}
           <!-- +号按钮（弹出菜单，向上，带滚动条） -->
           <div style="position:relative;flex-shrink:0">
             <button class="chat-plus-btn" onclick="toggleChatPlus(event)" title="更多">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
             <div class="chat-plus-menu" id="chatPlusMenu" onclick="event.stopPropagation()">
               <button class="chat-plus-menu-item" onclick="quickAskAndClose('帮我构思一个修仙题材的短剧大纲')"><span class="icon">📝</span>构思修仙短剧</button>
@@ -1207,10 +1219,10 @@ input,textarea,select{font-family:inherit}
             </div>
           </div>
           <!-- 输入框 -->
-          <textarea id="chatInput" placeholder="输入消息..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 14px;border-radius:10px;font-size:14px;resize:none;height:36px;max-height:120px;line-height:1.5;user-select:text" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
+          <textarea id="chatInput" placeholder="输入消息..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 12px;border-radius:8px;font-size:13px;resize:none;height:32px;max-height:100px;line-height:1.5;user-select:text" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
           <!-- 发送按钮 -->
-          <button onclick="sendChat()" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a24" stroke-width="2.5" style="width:18px;height:18px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <button onclick="sendChat()" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a24" stroke-width="2.5" style="width:16px;height:16px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </div>
       </div>
@@ -1893,6 +1905,8 @@ function switchView(view){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
   document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
   document.querySelectorAll('.more-menu-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
+  // 聊天视图：隐藏底部导航
+  document.body.classList.toggle('chat-active',view==='chat');
   const titles={workspace:'项目工作台',pipeline:'生产管线',assets:'资产库',newproject:'新建项目','workflow-manga':'2D国漫工作流','workflow-3d':'SSS级3D国漫','workflow-live':'AI真人短剧',serial:'长篇连载·100集生产线','character-lib':'角色资产库',autodispatch:'Auto派单中心',marketing:'营销团队',chat:'AI 聊天助手',replicate:'视频复刻',inspire:'灵感库',settings:'引擎设置'};
   document.getElementById('headerTitle').textContent=titles[view]||'';
   document.querySelector('.main-content').scrollTop=0;
@@ -2444,7 +2458,7 @@ function initChatModelSelector(){
   var select=document.getElementById('chatModelSelect');
   if(!select)return;
   // 保留 Auto 选项
-  select.innerHTML='<option value="auto">🤖 Auto</option>';
+  select.innerHTML='<option value="auto">Auto</option>';
   // 遍历所有服务商和模型
   for(var pid in LLM_PROVIDERS){
     var p=LLM_PROVIDERS[pid];
@@ -2495,7 +2509,7 @@ function updateChatModelBadge(){
       var p=LLM_PROVIDERS[keys.llm.provider];
       var modelName=keys.llm.model||p.defaultModel;
       if(select)select.title='Auto · '+p.name+' / '+modelName;
-      if(status)status.textContent='🤖 Auto · '+p.name+' / '+modelName;
+      if(status)status.textContent='Auto · '+p.name+' / '+modelName;
     }else{
       if(select)select.title='Auto · 未配置密钥';
       if(status)status.textContent='⚠️ 未配置密钥 · 请到设置配置';
