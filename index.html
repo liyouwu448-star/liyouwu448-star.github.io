@@ -444,8 +444,8 @@ input,textarea,select{font-family:inherit}
 .wf-selector-close:hover{color:var(--text)}
 
 /* === RESPONSIVE === */
-@media(max-width:768px){
-  .sidebar{display:none}
+@media(max-width:1024px){
+  .sidebar{display:none!important}
   .bottom-nav{display:flex}
   .main-content{padding-bottom:calc(var(--bottom-h) + 12px)}
   /* 聊天视图：隐藏底部导航，输入框贴底 */
@@ -454,37 +454,86 @@ input,textarea,select{font-family:inherit}
   body.chat-active #view-chat{padding:0!important}
   body.chat-active .more-overlay,
   body.chat-active .more-menu{display:none!important}
-  .view{padding:14px}
+  .view{padding:16px}
   .ws-grid{grid-template-columns:1fr}
   .stage-detail-grid{grid-template-columns:1fr}
   .np-config-grid{grid-template-columns:1fr}
-  .ws-hero{padding:20px}
-  .ws-hero h1{font-size:20px}
-  .pipe-stage-body{padding:12px}
+  .ws-hero{padding:22px 18px}
+  .ws-hero h1{font-size:22px}
+  .pipe-stage-body{padding:14px}
   .pipe-progress{width:50px}
   .pipe-stage-meta{display:none}
-  .pipe-mini-step{min-width:50px;font-size:9px}
+  .pipe-mini-step{min-width:54px;font-size:10px}
   .asset-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
-  .main-header{padding:0 14px}
-  .header-btn{padding:5px 10px;font-size:11px}
+  .main-header{padding:0 14px;height:48px}
+  .main-header-title{font-size:16px;font-weight:700}
+  .header-btn{padding:6px 12px;font-size:12px}
+  .main-header-actions .header-btn:not(.primary){display:none}
   .np-select-card{padding:16px 8px;min-height:56px}
-  .np-select-card-name{font-size:13px}
-  .np-select-card-desc{font-size:11px}
+  .np-select-card-name{font-size:14px}
+  .np-select-card-desc{font-size:12px}
   #npRatio{grid-template-columns:repeat(3,1fr)!important}
+  /* 移动端工作台优化 */
+  .ws-hero-desc{font-size:14px;line-height:1.6}
+  .ws-hero-stats{gap:20px;margin-top:18px}
+  .ws-stat-num{font-size:20px}
+  .ws-stat-label{font-size:11px}
+  .ws-panel{padding:16px}
+  .ws-panel-title{font-size:15px;margin-bottom:14px}
+  .activity-text{font-size:13px}
+  .activity-time{font-size:11px}
+  /* 移动端隐藏引擎状态详情，太占空间 */
+  #view-workspace .ws-panel:nth-of-type(3){display:none}
+  /* 快速入口移动端优化 */
+  .wf-quick-grid{grid-template-columns:1fr!important;gap:12px}
+  .wf-quick-card{padding:16px;min-height:auto}
+  .wf-quick-name{font-size:15px}
+  /* 工作流页面移动端优化 */
+  .wf-hero h2{font-size:20px}
+  .wf-hero-desc{font-size:14px;line-height:1.6}
+  .wf-config{padding:16px}
+  .wf-config-title{font-size:14px}
+  .wf-config-item{font-size:13px}
+  /* 长篇连载移动端优化 */
+  #view-serial .wf-config{padding:16px}
+  /* 设置页面移动端优化 */
+  .settings-section{padding:14px}
+  .settings-section-title{font-size:15px}
+  .settings-row-label{font-size:13px}
+  /* 派单看板移动端优化 */
+  .dispatch-board{grid-template-columns:1fr!important;gap:12px}
+  .dispatch-col{min-height:auto}
+  /* 营销团队移动端优化 */
+  .mk-agent-grid{grid-template-columns:1fr!important;gap:12px}
+  /* 灵感库移动端优化 */
+  .inspire-grid{grid-template-columns:1fr!important}
+  /* 视频复刻移动端优化 */
+  .replicate-grid{grid-template-columns:1fr!important}
+  /* 角色库移动端优化 */
+  .char-grid{grid-template-columns:1fr!important}
 }
 @media(max-width:420px){
   .pipe-stage-left{width:40px}
   .pipe-stage-icon{font-size:16px}
   .pipe-stage-name{font-size:13px}
-  .ws-hero-stats{gap:16px}
+  .ws-hero-stats{gap:14px}
   .ws-stat-num{font-size:18px}
-  .chat-model-select{max-width:48px;font-size:10px}
+  .chat-model-select{max-width:42px;font-size:11px}
+  .view{padding:12px}
+  .ws-hero{padding:18px 14px}
+  .ws-hero h1{font-size:20px}
+  .ws-hero-desc{font-size:13px}
+  .ws-panel{padding:14px}
+  .ws-panel-title{font-size:14px}
+  .more-menu-grid{grid-template-columns:repeat(3,1fr)}
+  .more-menu-item{font-size:11px;padding:10px 6px}
+  .more-menu-item svg{width:20px;height:20px}
 }
 
 /* ===== CHAT ===== */
 #view-chat{display:none}
 #view-chat.active{display:flex;flex-direction:column;height:calc(100vh - 100px)}
-@media(max-width:768px){
+@media(max-width:1024px){
   #view-chat.active{height:calc(100vh - 60px)}
 }
 body.chat-active #view-chat{padding:0!important}
