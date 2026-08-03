@@ -451,7 +451,8 @@ input,textarea,select{font-family:inherit}
   /* 聊天视图：隐藏底部导航，输入框贴底 */
   body.chat-active .bottom-nav{display:none!important}
   body.chat-active .main-content{padding-bottom:0!important}
-  body.chat-active #view-chat{padding:0!important}
+  body.chat-active .main-header{display:none!important}
+  body.chat-active #view-chat{padding:0!important;overflow-y:auto;-webkit-overflow-scrolling:touch}
   body.chat-active .more-overlay,
   body.chat-active .more-menu{display:none!important}
   .view{padding:16px}
@@ -518,7 +519,7 @@ input,textarea,select{font-family:inherit}
   .pipe-stage-name{font-size:13px}
   .ws-hero-stats{gap:14px}
   .ws-stat-num{font-size:18px}
-  .chat-model-select{max-width:42px;font-size:11px}
+  .chat-model-select{max-width:38px;font-size:13px}
   .view{padding:12px}
   .ws-hero{padding:18px 14px}
   .ws-hero h1{font-size:20px}
@@ -534,68 +535,65 @@ input,textarea,select{font-family:inherit}
 #view-chat{display:none}
 #view-chat.active{display:flex;flex-direction:column;height:calc(100vh - 100px)}
 @media(max-width:1024px){
-  #view-chat.active{height:calc(100vh - 60px)}
+  #view-chat.active{height:calc(100vh - 64px)}
 }
 body.chat-active #view-chat{padding:0!important}
-.chat-quick-btn{background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-mid);padding:6px 14px;border-radius:999px;font-size:12px;transition:.15s;white-space:nowrap}
-.chat-quick-btn:hover{border-color:var(--gold);color:var(--gold)}
-.chat-input-bar{display:flex;gap:4px;align-items:flex-end;padding:6px 0 0;flex-wrap:nowrap}
+.chat-input-bar{display:flex;gap:8px;align-items:flex-end;padding:10px 0 0;flex-wrap:nowrap}
 .chat-model-wrap{flex-shrink:0;position:relative}
 .chat-model-select{
   background:transparent;border:none;color:var(--text-dim);
-  padding:0;height:32px;border-radius:6px;font-size:11px;font-weight:500;
+  padding:0;height:48px;border-radius:10px;font-size:15px;font-weight:500;
   cursor:pointer;appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5' viewBox='0 0 24 24' fill='none' stroke='%235a5a72' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 0 center;
-  padding-right:8px;width:auto;max-width:42px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  padding-right:0;width:auto;max-width:38px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.chat-model-select:hover{color:var(--gold);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5' viewBox='0 0 24 24' fill='none' stroke='%23d4a843' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
+.chat-model-select:hover{color:var(--gold)}
 .chat-model-select:focus{outline:none}
-.chat-model-select optgroup{background:var(--bg-2);color:var(--text-dim);font-size:10px;font-weight:600}
-.chat-model-select option{background:var(--bg-2);color:var(--text);padding:4px;font-size:12px}
-.chat-plus-btn{width:32px;height:32px;border-radius:8px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:.15s;font-size:16px;font-weight:300}
+.chat-model-select optgroup{background:var(--bg-2);color:var(--text-dim);font-size:15px;font-weight:600}
+.chat-model-select option{background:var(--bg-2);color:var(--text);padding:8px;font-size:16px}
+.chat-plus-btn{width:36px;height:36px;border-radius:50%;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:.15s;font-size:18px;font-weight:300;padding:0}
 .chat-plus-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--bg-2)}
 /* 聊天顶部工具栏 */
-.chat-topbar{display:flex;align-items:center;gap:8px;padding:8px 4px;margin-bottom:12px}
-.chat-topbar-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-dim);transition:.15s;flex-shrink:0;background:transparent;border:none}
+.chat-topbar{display:flex;align-items:center;gap:10px;padding:10px 4px;margin-bottom:10px}
+.chat-topbar-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-dim);transition:.15s;flex-shrink:0;background:transparent;border:none}
 .chat-topbar-icon:hover{background:var(--bg-3);color:var(--gold)}
-.chat-topbar-title{font-size:15px;font-weight:600;flex:1;text-align:center;letter-spacing:.3px}
-.chat-topbar-right{display:flex;gap:2px;margin-left:auto}
+.chat-topbar-title{font-size:20px;font-weight:600;flex:1;text-align:center;letter-spacing:.3px}
+.chat-topbar-right{display:flex;gap:4px;margin-left:auto}
 /* 左侧抽屉 */
 .chat-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none;opacity:0;transition:opacity .25s}
 .chat-drawer-overlay.show{display:block;opacity:1}
 .chat-drawer{position:fixed;left:0;top:0;bottom:0;width:280px;max-width:80vw;background:var(--bg-1);border-right:1px solid var(--border);z-index:501;transform:translateX(-100%);transition:transform .25s ease;display:flex;flex-direction:column}
 .chat-drawer.show{transform:translateX(0)}
-.chat-drawer-header{padding:16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
-.chat-drawer-header-title{font-size:15px;font-weight:600;flex:1}
-.chat-drawer-new{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#1a1a24;border:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
-.chat-drawer-list{flex:1;overflow-y:auto;padding:8px}
-.chat-drawer-item{padding:10px 12px;border-radius:8px;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:10px;margin-bottom:2px}
+.chat-drawer-header{padding:18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.chat-drawer-header-title{font-size:18px;font-weight:600;flex:1}
+.chat-drawer-new{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#1a1a24;border:none;padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.chat-drawer-list{flex:1;overflow-y:auto;padding:10px}
+.chat-drawer-item{padding:14px 14px;border-radius:10px;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:12px;margin-bottom:3px}
 .chat-drawer-item:hover{background:var(--bg-2)}
 .chat-drawer-item.active{background:var(--gold-glow);border:1px solid var(--gold)}
 .chat-drawer-item-info{flex:1;min-width:0}
-.chat-drawer-item-title{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chat-drawer-item-time{font-size:10px;color:var(--text-dim);margin-top:2px}
-.chat-drawer-item-del{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);opacity:0;transition:.12s;flex-shrink:0;background:transparent;border:none;cursor:pointer}
+.chat-drawer-item-title{font-size:16px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-drawer-item-time{font-size:12px;color:var(--text-dim);margin-top:2px}
+.chat-drawer-item-del{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);opacity:0;transition:.12s;flex-shrink:0;background:transparent;border:none;cursor:pointer}
 .chat-drawer-item:hover .chat-drawer-item-del{opacity:1}
 .chat-drawer-item-del:hover{background:var(--red);color:#fff;opacity:1!important}
 /* +号弹出菜单（向上） */
-.chat-plus-menu{position:absolute;bottom:calc(100% + 8px);left:0;background:var(--bg-2);border:1px solid var(--border-l);border-radius:12px;padding:6px;display:none;flex-direction:column;gap:2px;min-width:180px;max-height:320px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:10}
+.chat-plus-menu{position:absolute;bottom:calc(100% + 8px);left:0;background:var(--bg-2);border:1px solid var(--border-l);border-radius:14px;padding:8px;display:none;flex-direction:column;gap:3px;min-width:200px;max-height:380px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:10}
 .chat-plus-menu.show{display:flex}
-.chat-plus-menu-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:.1s;color:var(--text);font-size:13px;white-space:nowrap;background:transparent;border:none;width:100%;text-align:left}
+.chat-plus-menu-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;cursor:pointer;transition:.1s;color:var(--text);font-size:16px;white-space:nowrap;background:transparent;border:none;width:100%;text-align:left}
 .chat-plus-menu-item:hover{background:var(--bg-3);color:var(--gold)}
-.chat-plus-menu-item .icon{width:20px;text-align:center;font-size:15px;flex-shrink:0}
+.chat-plus-menu-item .icon{width:24px;text-align:center;font-size:18px;flex-shrink:0}
 .chat-plus-menu-divider{height:1px;background:var(--border-l);margin:4px 0}
 /* 5级AI智能体按钮样式 */
-.ai-level-btn{background:transparent;border:1px solid var(--border-l);color:var(--text-dim);padding:6px 8px;border-radius:8px;font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.ai-level-btn{background:transparent;border:1px solid var(--border-l);color:var(--text-dim);padding:8px 12px;border-radius:10px;font-size:14px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .ai-level-btn:hover{border-color:var(--purple);color:var(--purple)}
 .ai-level-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,.1)}
-.chat-msg{display:flex;gap:8px;align-items:flex-start;animation:chatIn .3s ease;width:100%}
+.chat-msg{display:flex;gap:10px;align-items:flex-start;animation:chatIn .3s ease;width:100%}
 @keyframes chatIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .chat-msg.user{flex-direction:row-reverse}
-.chat-msg-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:var(--bg-3)}
+.chat-msg-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:var(--bg-3)}
 .chat-msg.user .chat-msg-avatar{background:linear-gradient(135deg,var(--brand),#8b5fff)}
-.chat-msg-bubble{max-width:calc(100% - 40px);padding:12px 14px;border-radius:14px;font-size:15px;line-height:1.75;word-wrap:break-word}
+.chat-msg-bubble{flex:0 1 auto;max-width:calc(100% - 54px);min-width:0;padding:14px 16px;border-radius:18px;font-size:19px;line-height:1.8;word-wrap:break-word;overflow-wrap:break-word}
+.chat-msg.user .chat-msg-bubble{flex:0 1 auto;max-width:calc(100% - 10px)}
 .chat-msg.bot .chat-msg-bubble{background:var(--bg-2);border:1px solid var(--border);border-top-left-radius:4px}
 .chat-msg.user .chat-msg-bubble{background:linear-gradient(135deg,var(--brand),#7c3aed);color:#fff;border-top-right-radius:4px;border:none}
 .chat-msg-text{user-select:text;white-space:pre-wrap}
@@ -606,24 +604,21 @@ body.chat-active #view-chat{padding:0!important}
 @keyframes typing{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
 /* 流式输出光标 */
-.stream-cursor{display:inline-block;width:2px;height:14px;background:var(--gold);animation:blink 1s infinite;vertical-align:middle;margin-left:2px}
+.stream-cursor{display:inline-block;width:2px;height:18px;background:var(--gold);animation:blink 1s infinite;vertical-align:middle;margin-left:2px}
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
-/* TTS 朗读控制条 */
-.tts-bar{display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:6px;border-top:1px solid var(--border);flex-wrap:wrap}
-.tts-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);font-size:11px;cursor:pointer;transition:.15s}
-.tts-btn:hover{border-color:var(--gold);color:var(--gold)}
-.tts-btn.active{background:var(--gold-glow);border-color:var(--gold);color:var(--gold)}
-.tts-btn svg{width:13px;height:13px}
-.tts-engine-toggle{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-dim);margin-left:auto}
-.tts-engine-toggle select{background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);border-radius:4px;padding:2px 4px;font-size:10px;cursor:pointer}
+/* TTS 朗读控制条 - 改为气泡弹出菜单 */
+.tts-bar{display:none}
+.bubble-actions{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap}
+.bubble-action-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);font-size:14px;cursor:pointer;transition:.15s}
+.bubble-action-btn:hover{border-color:var(--gold);color:var(--gold)}
+.bubble-action-btn.active{background:var(--gold-glow);border-color:var(--gold);color:var(--gold)}
 
 /* 派单提示条 */
-.dispatch-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg-2);border:1px solid var(--gold);border-radius:10px;padding:8px 14px;display:flex;align-items:center;gap:8px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastIn .3s ease;max-width:calc(100vw - 16px)}
+.dispatch-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--bg-2);border:1px solid var(--gold);border-radius:12px;padding:10px 18px;display:flex;align-items:center;gap:10px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastIn .3s ease;max-width:calc(100vw - 24px)}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.dispatch-toast-icon{font-size:14px;flex-shrink:0}
-.dispatch-toast-text{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dispatch-toast-action{background:var(--gold);color:#1a1a24;border:none;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.dispatch-toast-text{font-size:16px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dispatch-toast-action{background:var(--gold);color:#1a1a24;border:none;padding:6px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
 
 /* ===== REPLICATE ===== */
 .replicate-spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border-l);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
@@ -1221,18 +1216,18 @@ body.chat-active #view-chat{padding:0!important}
         <!-- 顶部工具栏：三条杠 | 标题 | 设置 | 主题 | 5级AI -->
         <div class="chat-topbar">
           <button class="chat-topbar-icon" onclick="toggleChatDrawer()" title="聊天记录">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
           <div class="chat-topbar-title" id="chatTopTitle">新对话</div>
           <div class="chat-topbar-right">
             <button class="chat-topbar-icon" onclick="toggleAILevel()" title="5级AI智能体">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><path d="M12 2a3 3 0 0 0-3 3v1H7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V5a3 3 0 0 0-3-3z"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M12 2a3 3 0 0 0-3 3v1H7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V5a3 3 0 0 0-3-3z"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg>
             </button>
             <button class="chat-topbar-icon" onclick="toggleChatTheme()" title="主题">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             </button>
             <button class="chat-topbar-icon" onclick="switchView('settings')" title="设置">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
           </div>
         </div>
@@ -1244,19 +1239,19 @@ body.chat-active #view-chat{padding:0!important}
           <button class="ai-level-btn active" onclick="setAILevel(3,this)" title="L3 创作智能体（默认）">L3 创作</button>
           <button class="ai-level-btn" onclick="setAILevel(4,this)" title="L4 深度思考+自我修复">L4 深思</button>
           <button class="ai-level-btn" onclick="setAILevel(5,this)" title="L5 多智能体协作+自动修复">L5 多智能体</button>
-          <span style="font-size:11px;color:var(--text-dim);margin-left:auto;align-self:center" id="aiLevelDesc">L3 · 漫剧创作智能体</span>
+          <span style="font-size:14px;color:var(--text-dim);margin-left:auto;align-self:center" id="aiLevelDesc">L3 · 漫剧创作智能体</span>
         </div>
 
         <!-- 聊天消息区 -->
-        <div id="chatMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:4px 4px 8px;min-height:200px">
+        <div id="chatMessages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:16px;padding:4px 2px 12px;min-height:200px;-webkit-overflow-scrolling:touch">
           <div class="chat-msg bot">
             <div class="chat-msg-bubble" style="background:transparent;border:none">
-              <div class="chat-msg-text" style="color:var(--text-dim);font-size:15px;line-height:1.8">你好，我是AI创作助手。支持流式对话、语音朗读、智能派单。<span id="chatKeyTip">配置密钥后即可开始对话 👇</span><br><br>💡 试试输入：<span style="color:var(--gold);cursor:pointer" onclick="document.getElementById('chatInput').value='帮我新建一个修仙漫剧项目';sendChat()">"帮我新建一个修仙漫剧项目"</span>（自动派单跳转）</div>
-              <div id="chatKeyQuick" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-                <button onclick="quickSetKey('siliconflow')" style="background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#1a1a24;border:none;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
+              <div class="chat-msg-text" style="color:var(--text-dim);font-size:18px;line-height:1.8">你好，我是AI创作助手。支持流式对话、语音朗读、智能派单。<span id="chatKeyTip">配置密钥后即可开始对话 👇</span><br><br>💡 试试输入：<span style="color:var(--gold);cursor:pointer" onclick="document.getElementById('chatInput').value='帮我新建一个修仙漫剧项目';sendChat()">"帮我新建一个修仙漫剧项目"</span>（自动派单跳转）</div>
+              <div id="chatKeyQuick" style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+                <button onclick="quickSetKey('siliconflow')" style="background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#1a1a24;border:none;padding:12px 18px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px">
                   🔑 配置硅基流动密钥（推荐·免费额度）
                 </button>
-                <button onclick="switchView('settings')" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;cursor:pointer">
+                <button onclick="switchView('settings')" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:12px 18px;border-radius:10px;font-size:16px;cursor:pointer">
                   ⚙️ 更多服务商
                 </button>
               </div>
@@ -1266,17 +1261,15 @@ body.chat-active #view-chat{padding:0!important}
 
         <!-- 输入区 -->
         <div class="chat-input-bar" style="position:relative">
-          <!-- Auto 模型选择（极小，无图标） -->
+          <!-- Auto 模型选择（最左边） -->
           <div class="chat-model-wrap">
             <select id="chatModelSelect" onchange="onChatModelChange()" class="chat-model-select">
               <option value="auto">Auto</option>
             </select>
           </div>
-          <!-- +号按钮（弹出菜单，向上，带滚动条） -->
+          <!-- ⊕号按钮（紧挨Auto右边） -->
           <div style="position:relative;flex-shrink:0">
-            <button class="chat-plus-btn" onclick="toggleChatPlus(event)" title="更多">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
+            <button class="chat-plus-btn" onclick="toggleChatPlus(event)" title="更多" style="font-size:20px;line-height:1">⊕</button>
             <div class="chat-plus-menu" id="chatPlusMenu" onclick="event.stopPropagation()">
               <button class="chat-plus-menu-item" onclick="quickAskAndClose('帮我构思一个修仙题材的短剧大纲')"><span class="icon">📝</span>构思修仙短剧</button>
               <button class="chat-plus-menu-item" onclick="quickAskAndClose('给主角设计一个成长转折点')"><span class="icon">🎭</span>角色成长弧</button>
@@ -1294,10 +1287,10 @@ body.chat-active #view-chat{padding:0!important}
             </div>
           </div>
           <!-- 输入框 -->
-          <textarea id="chatInput" placeholder="输入消息..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 12px;border-radius:8px;font-size:15px;resize:none;height:36px;max-height:100px;line-height:1.5;user-select:text" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
+          <textarea id="chatInput" placeholder="输入消息..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:14px 16px;border-radius:14px;font-size:19px;resize:none;height:48px;max-height:140px;line-height:1.5;user-select:text;min-width:0" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
           <!-- 发送按钮 -->
-          <button onclick="sendChat()" style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a24" stroke-width="2.5" style="width:18px;height:18px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          <button onclick="sendChat()" style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a24" stroke-width="2.5" style="width:22px;height:22px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </div>
       </div>
@@ -2677,8 +2670,8 @@ function chatKeyDown(e){
 }
 
 function autoResize(el){
-  el.style.height='44px';
-  el.style.height=Math.min(el.scrollHeight,120)+'px';
+  el.style.height='48px';
+  el.style.height=Math.min(el.scrollHeight,140)+'px';
 }
 
 async function sendChat(){
@@ -2818,10 +2811,9 @@ function showDispatchToast(info){
   
   var toast=document.createElement('div');
   toast.className='dispatch-toast';
-  toast.innerHTML='<span class="dispatch-toast-icon">'+info.icon+'</span>'+
-    '<span class="dispatch-toast-text">检测到指令，是否切换到「'+info.label+'」？</span>'+
+  toast.innerHTML='<span class="dispatch-toast-text">检测到指令，是否切换到「'+info.label+'」？</span>'+
     '<button class="dispatch-toast-action" onclick="switchView(\''+info.view+'\');dismissDispatchToast()">确认前往</button>'+
-    '<button class="dispatch-toast-cancel" onclick="dismissDispatchToast()" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0">取消</button>';
+    '<button class="dispatch-toast-cancel" onclick="dismissDispatchToast()" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);padding:6px 12px;border-radius:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex-shrink:0">取消</button>';
   document.body.appendChild(toast);
 }
 function dismissDispatchToast(){
@@ -2945,26 +2937,116 @@ function updateStreamingMsg(textEl,text){
 
 function finalizeStreamingMsg(textEl,text){
   var msgId='msg-'+Date.now();
-  textEl.parentElement.parentElement.setAttribute('data-msg-id',msgId);
+  var msgDiv=textEl.parentElement.parentElement;
+  msgDiv.setAttribute('data-msg-id',msgId);
   textEl.innerHTML=text.replace(/\n/g,'<br>');
-  // 添加朗读控制条
+  // 添加点击弹出朗读/复制菜单
   var bubble=textEl.parentElement;
-  var ttsBar=document.createElement('div');
-  ttsBar.className='tts-bar';
-  ttsBar.innerHTML=
-    '<button class="tts-btn" id="ttsPlay-'+msgId+'" onclick="ttsPlay(\''+msgId+'\')" title="朗读"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>朗读</button>'+
-    '<button class="tts-btn" id="ttsPause-'+msgId+'" onclick="ttsPause(\''+msgId+'\')" style="display:none" title="暂停"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>暂停</button>'+
-    '<button class="tts-btn" id="ttsResume-'+msgId+'" onclick="ttsResume(\''+msgId+'\')" style="display:none" title="继续"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>继续</button>'+
-    '<button class="tts-btn" id="ttsStop-'+msgId+'" onclick="ttsStop(\''+msgId+'\')" style="display:none" title="停止"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>停止</button>'+
-    '<div class="tts-engine-toggle">引擎'+
-    '<select id="ttsEngine-'+msgId+'" onchange="ttsEngineChange(\''+msgId+'\')">'+
-    '<option value="free">免费</option>'+
-    '<option value="doubao">豆包</option>'+
-    '</select></div>';
-  bubble.appendChild(ttsBar);
+  bubble.style.cursor='pointer';
+  bubble.onclick=function(e){
+    e.stopPropagation();
+    toggleBubbleActions(bubble,msgId,text);
+  };
   var c=document.getElementById('chatMessages');
   c.scrollTop=c.scrollHeight;
   return msgId;
+}
+
+// 气泡点击弹出 朗读/复制 菜单
+function toggleBubbleActions(bubble,msgId,rawText){
+  var existing=bubble.querySelector('.bubble-actions');
+  if(existing){
+    existing.remove();
+    return;
+  }
+  // 关闭其他气泡的菜单
+  document.querySelectorAll('.bubble-actions').forEach(function(el){el.remove();});
+  
+  var isPlaying=ttsCurrentMsgId===msgId&&ttsUtterance;
+  var isPaused=ttsPaused&&ttsCurrentMsgId===msgId;
+  
+  var bar=document.createElement('div');
+  bar.className='bubble-actions';
+  
+  // 复制按钮
+  var btnCopy=document.createElement('button');
+  btnCopy.className='bubble-action-btn';
+  btnCopy.textContent='📋 复制';
+  btnCopy.onclick=function(e){e.stopPropagation();copyMsgText(msgId);};
+  bar.appendChild(btnCopy);
+  
+  // 朗读/暂停/继续按钮
+  var btnTTS=document.createElement('button');
+  btnTTS.className='bubble-action-btn';
+  if(isPlaying&&!isPaused){
+    btnTTS.textContent='⏸ 暂停';
+    btnTTS.classList.add('active');
+    btnTTS.onclick=function(e){e.stopPropagation();ttsPause(msgId);bar.remove();};
+  }else if(isPaused){
+    btnTTS.textContent='▶ 继续';
+    btnTTS.onclick=function(e){e.stopPropagation();ttsResume(msgId);bar.remove();};
+  }else{
+    btnTTS.textContent='🔊 朗读';
+    btnTTS.onclick=function(e){e.stopPropagation();ttsPlay(msgId);bar.remove();};
+  }
+  bar.appendChild(btnTTS);
+  
+  // 停止按钮（仅在播放时显示）
+  if(isPlaying||isPaused){
+    var btnStop=document.createElement('button');
+    btnStop.className='bubble-action-btn';
+    btnStop.textContent='⬛ 停止';
+    btnStop.onclick=function(e){e.stopPropagation();ttsStop(msgId);bar.remove();};
+    bar.appendChild(btnStop);
+  }
+  
+  // 引擎选择
+  var sel=document.createElement('select');
+  sel.className='bubble-action-btn';
+  sel.style.padding='4px 8px';
+  sel.innerHTML='<option value="free">免费引擎</option><option value="doubao">豆包引擎</option>';
+  sel.value=ttsEngine;
+  sel.onchange=function(){ttsEngine=this.value;};
+  bar.appendChild(sel);
+  
+  bubble.appendChild(bar);
+}
+
+// 复制消息文字
+function copyMsgText(msgId){
+  var msgDiv=document.querySelector('[data-msg-id="'+msgId+'"]');
+  if(!msgDiv)return;
+  var textEl=msgDiv.querySelector('.chat-msg-text');
+  if(!textEl)return;
+  var text=textEl.innerText||textEl.textContent||'';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      showToast('已复制到剪贴板');
+    }).catch(function(){
+      fallbackCopy(text);
+    });
+  }else{
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.position='fixed';
+  ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand('copy');showToast('已复制到剪贴板');}catch(e){showToast('复制失败');}
+  document.body.removeChild(ta);
+}
+
+function showToast(msg){
+  var t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:120px;left:50%;transform:translateX(-50%);background:var(--bg-2);border:1px solid var(--gold);color:var(--text);padding:10px 18px;border-radius:10px;font-size:15px;z-index:999;animation:toastIn .3s ease';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},2000);
 }
 
 // ===== TTS 朗读功能 =====
@@ -2973,11 +3055,6 @@ var ttsCurrentMsgId=null;
 var ttsUtterance=null;
 var ttsPaused=false;
 
-function ttsEngineChange(msgId){
-  var sel=document.getElementById('ttsEngine-'+msgId);
-  if(sel)ttsEngine=sel.value;
-}
-
 // 获取消息纯文本
 function getMsgText(msgId){
   var el=document.querySelector('[data-msg-id="'+msgId+'"] .chat-msg-text');
@@ -2985,7 +3062,6 @@ function getMsgText(msgId){
   return el.textContent||'';
 }
 
-// 免费TTS朗读
 function ttsPlay(msgId){
   ttsStop(msgId);
   ttsCurrentMsgId=msgId;
@@ -3278,7 +3354,13 @@ function addUserMsg(text){
   const c=document.getElementById('chatMessages');
   const div=document.createElement('div');
   div.className='chat-msg user';
-  div.innerHTML=`<div class="chat-msg-bubble"><div class="chat-msg-text">${text.replace(/</g,'&lt;')}</div></div>`;
+  var msgId='msg-'+Date.now();
+  div.setAttribute('data-msg-id',msgId);
+  div.innerHTML=`<div class="chat-msg-bubble" style="cursor:pointer"><div class="chat-msg-text">${text.replace(/</g,'&lt;')}</div></div>`;
+  div.querySelector('.chat-msg-bubble').onclick=function(e){
+    e.stopPropagation();
+    toggleBubbleActions(this,msgId,text);
+  };
   c.appendChild(div);
   c.scrollTop=c.scrollHeight;
 }
@@ -3287,7 +3369,13 @@ function addBotMsg(text){
   const c=document.getElementById('chatMessages');
   const div=document.createElement('div');
   div.className='chat-msg bot';
-  div.innerHTML=`<div class="chat-msg-bubble"><div class="chat-msg-text">${text.replace(/\n/g,'<br>')}</div></div>`;
+  var msgId='msg-'+Date.now();
+  div.setAttribute('data-msg-id',msgId);
+  div.innerHTML=`<div class="chat-msg-bubble" style="cursor:pointer"><div class="chat-msg-text">${text.replace(/\n/g,'<br>')}</div></div>`;
+  div.querySelector('.chat-msg-bubble').onclick=function(e){
+    e.stopPropagation();
+    toggleBubbleActions(this,msgId,text);
+  };
   c.appendChild(div);
   c.scrollTop=c.scrollHeight;
 }
@@ -3308,7 +3396,7 @@ function removeTyping(){
 }
 
 function clearChat(){
-  document.getElementById('chatMessages').innerHTML=`<div class="chat-msg bot"><div class="chat-msg-bubble" style="background:transparent;border:none"><div class="chat-msg-text" style="color:var(--text-dim)">对话已清空。有什么想聊的？</div></div></div>`;
+  document.getElementById('chatMessages').innerHTML=`<div class="chat-msg bot"><div class="chat-msg-bubble" style="background:transparent;border:none"><div class="chat-msg-text" style="color:var(--text-dim);font-size:18px">对话已清空。有什么想聊的？</div></div></div>`;
   chatHistory=[];
   saveCurrentConversation();
 }
@@ -3369,7 +3457,7 @@ function newChat(){
   currentConvId=id;
   chatHistory=[];
   chatMode='creative';
-  document.getElementById('chatMessages').innerHTML=`<div class="chat-msg bot"><div class="chat-msg-bubble" style="background:transparent;border:none"><div class="chat-msg-text" style="color:var(--text-dim);font-size:15px;line-height:1.8">你好，我是AI创作助手。有什么想聊的？</div></div></div>`;
+  document.getElementById('chatMessages').innerHTML=`<div class="chat-msg bot"><div class="chat-msg-bubble" style="background:transparent;border:none"><div class="chat-msg-text" style="color:var(--text-dim);font-size:18px;line-height:1.8">你好，我是AI创作助手。有什么想聊的？</div></div></div>`;
   saveConversations();
   renderChatDrawerList();
   updateChatTopTitle();
@@ -3384,14 +3472,15 @@ function switchToConversation(id){
   var c=document.getElementById('chatMessages');
   if(c){
     if(chatHistory.length===0){
-      c.innerHTML=`<div class="chat-msg bot"><div class="chat-msg-bubble" style="background:transparent;border:none"><div class="chat-msg-text" style="color:var(--text-dim);font-size:15px;line-height:1.8">你好，我是AI创作助手。有什么想聊的？</div></div></div>`;
+      c.innerHTML=`<div class="chat-msg bot"><div class="chat-msg-bubble" style="background:transparent;border:none"><div class="chat-msg-text" style="color:var(--text-dim);font-size:18px;line-height:1.8">你好，我是AI创作助手。有什么想聊的？</div></div></div>`;
     }else{
       var html='';
       for(var i=0;i<chatHistory.length;i++){
+        var mid='msg-hist-'+i;
         if(chatHistory[i].role==='user'){
-          html+='<div class="chat-msg user"><div class="chat-msg-bubble"><div class="chat-msg-text">'+chatHistory[i].content.replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</div></div></div>';
+          html+='<div class="chat-msg user" data-msg-id="'+mid+'"><div class="chat-msg-bubble" style="cursor:pointer" onclick="toggleBubbleActions(this,\''+mid+'\',\''+chatHistory[i].content.replace(/'/g,'\\\'').replace(/\n/g,'\\n')+'\')"><div class="chat-msg-text">'+chatHistory[i].content.replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</div></div></div>';
         }else if(chatHistory[i].role==='assistant'){
-          html+='<div class="chat-msg bot"><div class="chat-msg-bubble"><div class="chat-msg-text">'+chatHistory[i].content.replace(/\n/g,'<br>')+'</div></div></div>';
+          html+='<div class="chat-msg bot" data-msg-id="'+mid+'"><div class="chat-msg-bubble" style="cursor:pointer" onclick="toggleBubbleActions(this,\''+mid+'\',\''+chatHistory[i].content.replace(/'/g,'\\\'').replace(/\n/g,'\\n')+'\')"><div class="chat-msg-text">'+chatHistory[i].content.replace(/\n/g,'<br>')+'</div></div></div>';
         }
       }
       c.innerHTML=html;
@@ -3492,6 +3581,10 @@ document.addEventListener('click',function(e){
     var menu=e.target.closest('.chat-plus-menu');
     if(!btn&&!menu)closeChatPlus();
   }
+  // 点击气泡外部关闭气泡菜单
+  if(!e.target.closest('.chat-msg-bubble')){
+    document.querySelectorAll('.bubble-actions').forEach(function(el){el.remove();});
+  }
 });
 
 // ===== 5级AI智能体 =====
@@ -3556,12 +3649,6 @@ function saveChatHistory(){
 // 从本地存储恢复聊天历史（改为多对话）
 function restoreChatHistory(){
   loadConversations();
-}
-
-// 调整autoResize适配新高度
-function autoResize(el){
-  el.style.height='36px';
-  el.style.height=Math.min(el.scrollHeight,120)+'px';
 }
 
 // ===== 快速密钥弹窗 =====
