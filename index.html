@@ -592,8 +592,7 @@ body.chat-active #view-chat{padding:0!important}
 .chat-msg.user{flex-direction:row-reverse}
 .chat-msg-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;background:var(--bg-3)}
 .chat-msg.user .chat-msg-avatar{background:linear-gradient(135deg,var(--brand),#8b5fff)}
-.chat-msg-bubble{flex:0 1 auto;max-width:calc(100% - 54px);min-width:0;padding:14px 16px;border-radius:18px;font-size:19px;line-height:1.8;word-wrap:break-word;overflow-wrap:break-word}
-.chat-msg.user .chat-msg-bubble{flex:0 1 auto;max-width:calc(100% - 10px)}
+.chat-msg-bubble{flex:0 1 auto;max-width:calc(100% - 10px);min-width:0;padding:14px 16px;border-radius:18px;font-size:19px;line-height:1.8;word-wrap:break-word;overflow-wrap:break-word}
 .chat-msg.bot .chat-msg-bubble{background:var(--bg-2);border:1px solid var(--border);border-top-left-radius:4px}
 .chat-msg.user .chat-msg-bubble{background:linear-gradient(135deg,var(--brand),#7c3aed);color:#fff;border-top-right-radius:4px;border:none}
 .chat-msg-text{user-select:text;white-space:pre-wrap}
@@ -1126,21 +1125,29 @@ body.chat-active #view-chat{padding:0!important}
         <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
           <div class="settings-row-label">服务商</div>
           <select id="api-image-provider" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px;width:100%">
-            <option value="stability">Stability AI (SDXL)</option>
+            <option value="siliconflow" selected>硅基流动 (Kolors/FLUX) ✅推荐·免费额度</option>
+            <option value="volcengine">火山引擎 (豆包Seedream)</option>
             <option value="dashscope">阿里通义万相</option>
-            <option value="volcengine">火山引擎 (豆包)</option>
+            <option value="stability">Stability AI (SDXL)</option>
             <option value="openai">OpenAI (DALL-E 3)</option>
-            <option value="midjourney">Midjourney (第三方)</option>
             <option value="comfyui">ComfyUI 本地部署</option>
           </select>
         </div>
         <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
-          <div class="settings-row-label">API Key</div>
-          <input type="password" id="api-image-key" placeholder="sk-..." style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px;width:100%;user-select:text">
+          <div class="settings-row-label">绘图模型（硅基流动可选）</div>
+          <select id="api-image-model" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px;width:100%">
+            <option value="Kwai-Kolors/Kolors" selected>Kolors（快手·通用·推荐✅）</option>
+            <option value="black-forest-labs/FLUX.1-schnell">FLUX.1-schnell（快速·需付费）</option>
+            <option value="stabilityai/stable-diffusion-3-5-large">SD3.5-Large（高质量·需付费）</option>
+          </select>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
+          <div class="settings-row-label">API Key（硅基流动与聊天共用同一密钥）</div>
+          <input type="password" id="api-image-key" placeholder="sk-... 硅基流动密钥" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px;width:100%;user-select:text">
         </div>
         <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
           <div class="settings-row-label">API 地址（ComfyUI 本地填 http://127.0.0.1:8188）</div>
-          <input type="text" id="api-image-url" placeholder="https://api.stability.ai" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px;width:100%;user-select:text">
+          <input type="text" id="api-image-url" placeholder="留空使用默认" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px;width:100%;user-select:text">
         </div>
       </div>
 
@@ -1220,6 +1227,9 @@ body.chat-active #view-chat{padding:0!important}
           </button>
           <div class="chat-topbar-title" id="chatTopTitle">新对话</div>
           <div class="chat-topbar-right">
+            <button class="chat-topbar-icon" onclick="quickSetKey('siliconflow')" title="配置API密钥" style="color:var(--gold)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+            </button>
             <button class="chat-topbar-icon" onclick="toggleAILevel()" title="5级AI智能体">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M12 2a3 3 0 0 0-3 3v1H7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-2V5a3 3 0 0 0-3-3z"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg>
             </button>
@@ -1261,16 +1271,12 @@ body.chat-active #view-chat{padding:0!important}
 
         <!-- 输入区 -->
         <div class="chat-input-bar" style="position:relative">
-          <!-- Auto 模型选择（最左边） -->
-          <div class="chat-model-wrap">
-            <select id="chatModelSelect" onchange="onChatModelChange()" class="chat-model-select">
-              <option value="auto">Auto</option>
-            </select>
-          </div>
-          <!-- ⊕号按钮（紧挨Auto右边） -->
+          <!-- ⊕号按钮（最左边） -->
           <div style="position:relative;flex-shrink:0">
             <button class="chat-plus-btn" onclick="toggleChatPlus(event)" title="更多" style="font-size:20px;line-height:1">⊕</button>
             <div class="chat-plus-menu" id="chatPlusMenu" onclick="event.stopPropagation()">
+              <button class="chat-plus-menu-item" onclick="quickGenerateManga()" style="background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(212,168,67,.05));border:1px solid rgba(212,168,67,.3)"><span class="icon">🚀</span><strong>一键生成漫剧（真实生成）</strong></button>
+              <div class="chat-plus-menu-divider"></div>
               <button class="chat-plus-menu-item" onclick="quickAskAndClose('帮我构思一个修仙题材的短剧大纲')"><span class="icon">📝</span>构思修仙短剧</button>
               <button class="chat-plus-menu-item" onclick="quickAskAndClose('给主角设计一个成长转折点')"><span class="icon">🎭</span>角色成长弧</button>
               <button class="chat-plus-menu-item" onclick="quickAskAndClose('写一段高潮场景的对白')"><span class="icon">💬</span>高潮对白</button>
@@ -1285,6 +1291,12 @@ body.chat-active #view-chat{padding:0!important}
               <button class="chat-plus-menu-item" onclick="clearChatAndClose()"><span class="icon">🗑</span>清空当前对话</button>
               <button class="chat-plus-menu-item" onclick="newChatAndClose()"><span class="icon">➕</span>新建对话</button>
             </div>
+          </div>
+          <!-- Auto 模型选择（挨着⊕右边） -->
+          <div class="chat-model-wrap">
+            <select id="chatModelSelect" onchange="onChatModelChange()" class="chat-model-select">
+              <option value="auto">Auto</option>
+            </select>
           </div>
           <!-- 输入框 -->
           <textarea id="chatInput" placeholder="输入消息..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:14px 16px;border-radius:14px;font-size:19px;resize:none;height:48px;max-height:140px;line-height:1.5;user-select:text;min-width:0" onkeydown="chatKeyDown(event)" oninput="autoResize(this)"></textarea>
@@ -2693,7 +2705,26 @@ async function sendChat(){
   var providerName='';
   var modelName='';
   
-  if(chatModelSelection==='auto'){
+  // 代理模式：服务器已配置密钥，直接使用默认或选择的模型
+  if(proxyAvailable){
+    if(chatModelSelection==='auto'){
+      // 自动选择第一个已配置的平台，优先硅基流动
+      var autoProvider=proxyConfiguredProviders.siliconflow?.configured?'siliconflow':
+                       Object.keys(proxyConfiguredProviders).find(function(k){return proxyConfiguredProviders[k].configured;})||'siliconflow';
+      var p=LLM_PROVIDERS[autoProvider];
+      llmConfig={provider:autoProvider,key:'',model:p?p.defaultModel:''};
+      providerName=p?p.name:autoProvider;
+      modelName=p?p.defaultModel:'';
+    }else{
+      var parts=chatModelSelection.split(':');
+      var provider=parts[0];
+      var model=parts.slice(1).join(':');
+      var p=LLM_PROVIDERS[provider];
+      llmConfig={provider:provider,key:'',model:model||(p?p.defaultModel:'')};
+      providerName=p?p.name:provider;
+      modelName=model||(p?p.defaultModel:'');
+    }
+  }else if(chatModelSelection==='auto'){
     var keys={};
     try{keys=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
     if(keys.llm&&keys.llm.key&&keys.llm.provider){
@@ -2766,7 +2797,9 @@ async function sendChat(){
     }
   }else{
     removeTyping();
-    if(chatModelSelection==='auto'){
+    if(proxyAvailable){
+      addBotMsg('⚠️ 代理服务器已连接，但未配置任何平台的API密钥。\n\n请在服务器端的 `server.js` 文件或环境变量中配置至少一个平台的API密钥，然后重启服务器。');
+    }else if(chatModelSelection==='auto'){
       addBotMsg('⚠️ 尚未配置 AI 密钥，无法对话。\n\n请先到「设置 → 密钥管理」配置 LLM 服务商和 API Key，推荐使用硅基流动（注册送额度，支持浏览器直接调用）。\n\n配置完成后即可与 AI 实时对话。');
     }else{
       addBotMsg('⚠️ 未找到「'+providerName+'」的 API 密钥。\n\n请先到「设置 → 密钥管理」配置该服务商的密钥，或在模型选择器中切换到已配置的服务商。\n\n💡 提示：设置中配置的任何服务商密钥，都可以在聊天中直接切换使用。');
@@ -2822,8 +2855,84 @@ function dismissDispatchToast(){
   if(dispatchToastTimer){clearTimeout(dispatchToastTimer);dispatchToastTimer=null;}
 }
 
+// ===== 代理服务器检测 =====
+var proxyAvailable=false;
+var proxyConfiguredProviders={};
+async function detectProxy(){
+  try{
+    var resp=await fetch('/api/health',{method:'GET',timeout:2000});
+    if(resp.ok){
+      var data=await resp.json();
+      proxyAvailable=true;
+      // 获取已配置的平台列表
+      try{
+        var pResp=await fetch('/api/providers');
+        if(pResp.ok){
+          proxyConfiguredProviders=await pResp.json();
+        }
+      }catch(e){}
+      console.log('[代理模式] 检测到API代理服务器，已配置平台:',data.configuredProviders);
+    }
+  }catch(e){
+    proxyAvailable=false;
+    console.log('[直连模式] 未检测到代理服务器，使用浏览器直连');
+  }
+}
+detectProxy();
+
 // ===== 流式调用LLM API =====
 async function callLLMStream(messages,llmConfig,onChunk){
+  // 如果代理服务器可用，优先走代理（密钥在服务器端，不暴露给浏览器）
+  if(proxyAvailable){
+    var model=llmConfig.model||(LLM_PROVIDERS[llmConfig.provider]?LLM_PROVIDERS[llmConfig.provider].defaultModel:'');
+    var resp=await fetch('/api/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        provider:llmConfig.provider,
+        model:model,
+        messages:messages,
+        stream:true,
+        temperature:0.8,
+        max_tokens:2048
+      })
+    });
+    if(!resp.ok){
+      var errText=await resp.text();
+      var errObj={};try{errObj=JSON.parse(errText);}catch(e){}
+      throw new Error(errObj.error||errObj.message||('HTTP '+resp.status+': '+errText.substring(0,300)));
+    }
+    var reader=resp.body.getReader();
+    var decoder=new TextDecoder();
+    var buffer='';
+    while(true){
+      var result=await reader.read();
+      if(result.done)break;
+      buffer+=decoder.decode(result.value,{stream:true});
+      var lines=buffer.split('\n');
+      buffer=lines.pop();
+      for(var li=0;li<lines.length;li++){
+        var line=lines[li].trim();
+        if(line.startsWith('data:')){
+          var dataStr=line.slice(5).trim();
+          if(dataStr==='[DONE]')return;
+          try{
+            var data=JSON.parse(dataStr);
+            var content='';
+            if(data.choices&&data.choices[0]&&data.choices[0].delta&&data.choices[0].delta.content){
+              content=data.choices[0].delta.content;
+            }else if(data.type==='content_block_delta'&&data.delta&&data.delta.text){
+              content=data.delta.text;
+            }
+            if(content)onChunk(content);
+          }catch(e){}
+        }
+      }
+    }
+    return;
+  }
+  
+  // 直连模式（无代理服务器时使用）
   var config=LLM_PROVIDERS[llmConfig.provider];
   if(!config)throw new Error('未知的服务商：'+llmConfig.provider);
   var model=llmConfig.model||config.defaultModel;
@@ -3573,6 +3682,378 @@ function setChatModeAndClose(mode){
 function clearChatAndClose(){closeChatPlus();clearChat();}
 function newChatAndClose(){closeChatPlus();newChat();}
 
+// ===== 一键真实生成漫剧 =====
+var mangaGenRunning=false;
+async function quickGenerateManga(){
+  if(mangaGenRunning){addBotMsg('⚠️ 已有生成任务在进行中，请等待完成...');return;}
+  closeChatPlus();
+  
+  // 检查是否有密钥
+  var hasKey=false;
+  if(proxyAvailable){
+    hasKey=true;
+  }else{
+    try{
+      var k=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');
+      hasKey=!!(k.llm&&k.llm.key);
+    }catch(e){}
+  }
+  if(!hasKey){
+    addBotMsg('⚠️ 请先配置API密钥才能生成漫剧。\n\n推荐使用硅基流动（注册送免费额度）：\n1. 点击上方 🔑 图标\n2. 选择「硅基流动」\n3. 填入你的API Key\n\n获取地址：https://cloud.siliconflow.cn/i/rOrOwByo');
+    return;
+  }
+  
+  var topic=prompt('请输入你想生成的漫剧题材（如：5岁孤儿石生得到混沌葫芦修仙）','5岁孤儿石生得到混沌葫芦修仙')||'';
+  if(!topic.trim())return;
+  topic=topic.trim();
+  
+  mangaGenRunning=true;
+  var shotCount=3; // 默认生成3个关键镜头
+  
+  // 创建进度消息
+  var progressMsg=document.createElement('div');
+  progressMsg.className='chat-msg bot';
+  progressMsg.innerHTML='<div class="chat-msg-bubble" style="min-width:200px"><div class="chat-msg-text" id="mangaProgress">🚀 开始生成漫剧：《'+topic.replace(/</g,'&lt;')+'》\n\n⏳ 正在生成剧本大纲...</div></div>';
+  document.getElementById('chatMessages').appendChild(progressMsg);
+  var progressEl=progressMsg.querySelector('#mangaProgress');
+  document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+  
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){
+    progressEl.innerHTML+='\n\n❌ 无法获取LLM配置';
+    mangaGenRunning=false;
+    return;
+  }
+  
+  try{
+    // ===== 步骤1：生成剧本大纲 =====
+    var scriptResult='';
+    var scriptPrompt=`你是一位顶级国漫编剧。请根据题材"${topic}"，创作一个3分钟漫剧短剧的剧本大纲。
+
+要求：
+1. 写出吸引人的标题
+2. 写出故事核心设定（50字内）
+3. 写出3个关键分镜镜头，每个镜头包含：
+   - 镜头编号（shot1, shot2, shot3）
+   - 画面描述（中文，50字内，要具体，有画面感）
+   - 英文Prompt（用于AI绘图，要包含：风格描述+主体+场景+光影+构图，格式：Chinese ink anime style, [主体描述], [场景], cinematic lighting, detailed, 8k）
+   - 台词/旁白（20字内）
+
+请用以下格式输出：
+【标题】xxx
+【设定】xxx
+【分镜】
+shot1: [画面描述] | [英文prompt] | [台词]
+shot2: [画面描述] | [英文prompt] | [台词]
+shot3: [画面描述] | [英文prompt] | [台词]`;
+    
+    var messages=[
+      {role:'system',content:'你是顶级国漫编剧和分镜师，擅长创作有画面感的短剧。'},
+      {role:'user',content:scriptPrompt}
+    ];
+    
+    await callLLMStream(messages,llmConfig,function(chunk){
+      scriptResult+=chunk;
+      progressEl.innerHTML='🚀 正在生成漫剧：《'+topic.replace(/</g,'&lt;')+'》\n\n📝 剧本生成中...\n\n'+scriptResult.replace(/\n/g,'<br>');
+      document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+    });
+    
+    progressEl.innerHTML+='<br><br>✅ 剧本生成完成！';
+    document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+    
+    // ===== 步骤2：解析分镜 =====
+    var shots=[];
+    var shotRegex=/shot(\d+)\s*:\s*([^|]+)\|\s*([^|]+)\|\s*(.+)/gi;
+    var match;
+    while((match=shotRegex.exec(scriptResult))!==null){
+      shots.push({
+        id:parseInt(match[1]),
+        desc:match[2].trim(),
+        prompt:match[3].trim(),
+        dialogue:match[4].trim()
+      });
+    }
+    
+    if(shots.length===0){
+      // 如果正则没匹配到，尝试简单解析
+      shots=[
+        {id:1,desc:'开场：主角登场',prompt:'Chinese ink anime style, young orphan boy standing on desolate wasteland, dawn light, cinematic, detailed, 8k',dialogue:'天地玄黄，宇宙洪荒...'},
+        {id:2,desc:'获得宝物',prompt:'Chinese ink anime style, glowing gourd artifact floating in air, mystical energy, ancient cave, dramatic lighting',dialogue:'这是...混沌葫芦？'},
+        {id:3,desc:'力量觉醒',prompt:'Chinese ink anime style, boy with glowing eyes, spiritual energy erupting, epic battle stance, golden aura',dialogue:'我的修仙之路，开始了！'}
+      ];
+    }
+    
+    // 提取标题和设定
+    var titleMatch=scriptResult.match(/【标题】(.+)/);
+    var settingMatch=scriptResult.match(/【设定】(.+)/);
+    var title=titleMatch?titleMatch[1].trim():topic;
+    var setting=settingMatch?settingMatch[1].trim():'';
+    
+    // ===== 步骤3：生成图片 =====
+    progressEl.innerHTML+='<br><br>🎨 开始生成图片...';
+    document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+    
+    var results=[];
+    for(var i=0;i<shots.length;i++){
+      var shot=shots[i];
+      progressEl.innerHTML='🚀 《'+title.replace(/</g,'&lt;')+'》\n\n📝 剧本：✅\n🎨 图片生成中 ('+(i+1)+'/'+shots.length+')：'+shot.desc.replace(/</g,'&lt;');
+      document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+      
+      try{
+        var imageUrl=await generateImage(shot.prompt);
+        results.push({shot:shot,url:imageUrl,success:true});
+      }catch(e){
+        var errMsg=e.message||'未知错误';
+        var hint='';
+        if(errMsg.indexOf('Token is invalid')>=0||errMsg.indexOf('invalid')>=0||errMsg.indexOf('401')>=0){
+          hint='\n\n💡 原因：API密钥无效或已过期\n请点击右上角🔑重新配置硅基流动密钥\n获取地址：https://cloud.siliconflow.cn/i/rOrOwByo';
+        }else if(errMsg.indexOf('402')>=0||errMsg.indexOf('payment')>=0||errMsg.indexOf('余额')>=0){
+          hint='\n\n💡 原因：账户余额不足\n请登录硅基流动充值或领取免费额度';
+        }else if(errMsg.indexOf('Failed to fetch')>=0||errMsg.indexOf('Network')>=0){
+          hint='\n\n💡 原因：网络连接失败\n请检查网络后重试';
+        }
+        results.push({shot:shot,url:null,success:false,error:errMsg+hint});
+      }
+    }
+    
+    // ===== 步骤4：展示最终结果 =====
+    var finalHtml='<div style="margin-bottom:10px">🎬 <strong>《'+title.replace(/</g,'&lt;')+'》</strong></div>';
+    if(setting){
+      finalHtml+='<div style="color:var(--text-dim);font-size:16px;margin-bottom:14px">'+setting.replace(/</g,'&lt;')+'</div>';
+    }
+    
+    for(var i=0;i<results.length;i++){
+      var r=results[i];
+      finalHtml+='<div style="margin-bottom:16px">';
+      finalHtml+='<div style="font-size:14px;color:var(--gold);margin-bottom:6px">📷 镜头'+r.shot.id+'：'+r.shot.desc.replace(/</g,'&lt;')+'</div>';
+      if(r.success&&r.url){
+        finalHtml+='<img src="'+r.url+'" style="width:100%;border-radius:12px;border:1px solid var(--border-l)" loading="lazy">';
+        finalHtml+='<div style="font-size:15px;margin-top:6px;font-style:italic">「'+r.shot.dialogue.replace(/</g,'&lt;')+'」</div>';
+      }else{
+        finalHtml+='<div style="background:var(--bg-3);border-radius:8px;padding:20px;text-align:center;color:var(--text-dim);font-size:14px">❌ 图片生成失败：'+(r.error||'未知错误')+'</div>';
+      }
+      finalHtml+='</div>';
+    }
+    
+    var successCount=results.filter(function(r){return r.success;}).length;
+    var statusColor=successCount===results.length?'var(--teal)':(successCount>0?'var(--gold)':'var(--red,#ef4444)');
+    var statusIcon=successCount===results.length?'✅':(successCount>0?'⚠️':'❌');
+    finalHtml+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:14px;color:'+statusColor+'">'+statusIcon+' 生成完成！成功 '+successCount+'/'+results.length+' 个镜头</div>';
+    
+    // 替换进度消息为最终结果
+    progressMsg.querySelector('.chat-msg-bubble').innerHTML='<div class="chat-msg-text">'+finalHtml+'</div>';
+    document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+    
+  }catch(e){
+    progressEl.innerHTML+='<br><br>❌ 生成失败：'+(e.message||e);
+    console.error('生成错误:',e);
+  }
+  
+  mangaGenRunning=false;
+}
+
+// 获取当前激活的LLM配置
+async function getActiveLLMConfig(){
+  if(proxyAvailable){
+    var autoProvider=proxyConfiguredProviders.siliconflow?.configured?'siliconflow':
+                     Object.keys(proxyConfiguredProviders).find(function(k){return proxyConfiguredProviders[k].configured;})||'siliconflow';
+    var p=LLM_PROVIDERS[autoProvider];
+    return {provider:autoProvider,key:'',model:p?p.defaultModel:'deepseek-ai/DeepSeek-V4-Pro'};
+  }
+  try{
+    var k=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');
+    if(k.llm&&k.llm.key){
+      return k.llm;
+    }
+  }catch(e){}
+  return null;
+}
+
+// 调用图像生成API（多平台支持）
+async function generateImage(prompt){
+  // 获取绘图配置
+  var k={};
+  try{k=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
+  
+  var imgProvider=(k.image&&k.image.provider)?k.image.provider:'siliconflow';
+  var imgKey=(k.image&&k.image.key)?k.image.key:(k.llm&&k.llm.key?k.llm.key:'');
+  // 从设置中获取用户选择的模型，默认Kolors
+  var imgModelSel=(k.image&&k.image.model)?k.image.model:'Kwai-Kolors/Kolors';
+  
+  if(!imgKey){
+    throw new Error('未配置绘图API密钥。请点击🔑设置，在AI绘图中填入硅基流动API Key（与聊天密钥相同）');
+  }
+  
+  // 各平台API配置
+  var platforms={
+    siliconflow:{
+      url:'https://api.siliconflow.cn/v1/images/generations',
+      buildBody:function(p,model){
+        var m=model||imgModelSel;
+        var body={
+          model:m,
+          prompt:p,
+          image_size:'1024x1024',
+          batch_size:1,
+          num_inference_steps:20
+        };
+        // Kolors 支持 guidance_scale
+        if(m.indexOf('Kolors')>=0){
+          body.guidance_scale=7.5;
+        }
+        // FLUX.1-schnell 用少步数
+        if(m.indexOf('FLUX')>=0){
+          body.num_inference_steps=4;
+        }
+        return body;
+      },
+      parseResult:function(data){
+        if(data.images&&data.images[0]&&data.images[0].url)return data.images[0].url;
+        if(data.data&&data.data[0]&&data.data[0].url)return data.data[0].url;
+        return null;
+      }
+    },
+    volcengine:{
+      url:'https://ark.cn-beijing.volces.com/api/v3/images/generations',
+      buildBody:function(p){
+        return {
+          model:'doubao-seedream-3-0-t2i-250515',
+          prompt:p,
+          size:'1024x1024',
+          response_format:'url',
+          watermark:false
+        };
+      },
+      parseResult:function(data){
+        if(data.data&&data.data[0]&&data.data[0].url)return data.data[0].url;
+        return null;
+      }
+    },
+    dashscope:{
+      url:'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis',
+      buildBody:function(p){
+        return {
+          model:'wanx2.1-t2i-turbo',
+          input:{prompt:p},
+          parameters:{size:'1024*1024',n:1}
+        };
+      },
+      parseResult:function(data){
+        if(data.output&&data.output.task_id){
+          return '__ASYNC_TASK__:'+data.output.task_id;
+        }
+        return null;
+      }
+    },
+    stability:{
+      url:'https://api.stability.ai/v2beta/stable-image/generate/sd3',
+      buildBody:function(p){
+        return null;
+      },
+      parseResult:function(data){
+        if(data.image)return 'data:image/png;base64,'+data.image;
+        return null;
+      }
+    }
+  };
+  
+  var plat=platforms[imgProvider]||platforms.siliconflow;
+  
+  // 通义万相需要特殊处理（异步任务）
+  if(imgProvider==='dashscope'){
+    var resp=await fetch(plat.url,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+imgKey,
+        'X-DashScope-Async':'enable'
+      },
+      body:JSON.stringify(plat.buildBody(prompt))
+    });
+    if(!resp.ok){
+      var t=await resp.text();
+      var err={};try{err=JSON.parse(t);}catch(e){}
+      throw new Error(err.message||err.error?.message||('HTTP '+resp.status+': '+t.substring(0,200)));
+    }
+    var taskData=await resp.json();
+    if(taskData.output&&taskData.output.task_id){
+      var taskId=taskData.output.task_id;
+      for(var i=0;i<30;i++){
+        await new Promise(function(r){setTimeout(r,2000);});
+        var pollResp=await fetch('https://dashscope.aliyuncs.com/api/v1/tasks/'+taskId,{
+          headers:{'Authorization':'Bearer '+imgKey}
+        });
+        if(pollResp.ok){
+          var pollData=await pollResp.json();
+          if(pollData.output&&pollData.output.task_status==='SUCCEEDED'){
+            if(pollData.output.results&&pollData.output.results[0]&&pollData.output.results[0].url){
+              return pollData.output.results[0].url;
+            }
+          }
+          if(pollData.output&&pollData.output.task_status==='FAILED'){
+            throw new Error('通义万相生成失败：'+(pollData.output.message||''));
+          }
+        }
+      }
+      throw new Error('通义万相生成超时');
+    }
+    throw new Error('通义万相返回异常');
+  }
+  
+  // Stability AI 用 FormData
+  if(imgProvider==='stability'){
+    var formData=new FormData();
+    formData.append('prompt',prompt);
+    formData.append('model','sd3-medium');
+    formData.append('aspect_ratio','1:1');
+    var resp=await fetch(plat.url,{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+imgKey,'Accept':'application/json'},
+      body:formData
+    });
+    if(!resp.ok){
+      var t=await resp.text();
+      throw new Error('HTTP '+resp.status+': '+t.substring(0,200));
+    }
+    var data=await resp.json();
+    var url=plat.parseResult(data);
+    if(url)return url;
+    throw new Error('Stability AI返回数据格式异常');
+  }
+  
+  // 硅基流动、豆包（OpenAI兼容格式）
+  var resp=await fetch(plat.url,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+imgKey
+    },
+    body:JSON.stringify(plat.buildBody(prompt,imgModelSel))
+  });
+  
+  if(!resp.ok){
+    var t=await resp.text();
+    var err={};try{err=JSON.parse(t);}catch(e){}
+    var errMsg=err.error?.message||err.message||('HTTP '+resp.status+': '+t.substring(0,200));
+    // 友好的错误提示
+    if(errMsg.indexOf('Model disabled')>=0){
+      errMsg='当前绘图模型不可用。请在🔑设置→AI绘图中切换模型为「Kolors（推荐）」，或在硅基流动官网开通对应模型权限。';
+    }
+    if(resp.status===401){
+      errMsg='API密钥无效，请检查硅基流动API Key是否正确。';
+    }
+    if(resp.status===429){
+      errMsg='请求频率超限，请稍后重试。';
+    }
+    throw new Error(errMsg);
+  }
+  
+  var data=await resp.json();
+  var url=plat.parseResult(data);
+  if(url)return url;
+  throw new Error('图片生成返回数据格式异常：'+JSON.stringify(data).substring(0,200));
+}
+
 // 点击外部关闭 +号菜单
 document.addEventListener('click',function(e){
   var m=document.getElementById('chatPlusMenu');
@@ -3700,6 +4181,10 @@ function saveKeyModal(){
   try{
     var keys=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');
     keys.llm={provider:keyModalProvider,key:key,model:model};
+    // 硅基流动的密钥同时用于绘图
+    if(keyModalProvider==='siliconflow'){
+      keys.image={provider:'siliconflow',key:key,model:(keys.image&&keys.image.model)?keys.image.model:'Kwai-Kolors/Kolors',url:''};
+    }
     localStorage.setItem('manga_api_keys',JSON.stringify(keys));
   }catch(e){alert('保存失败：'+e.message);return;}
   closeKeyModal();
@@ -3708,7 +4193,7 @@ function saveKeyModal(){
   var quick=document.getElementById('chatKeyQuick');if(quick)quick.style.display='none';
   updateChatModelBadge();
   // 提示
-  addBotMsg('✅ 密钥已保存（'+(LLM_PROVIDERS[keyModalProvider]?LLM_PROVIDERS[keyModalProvider].name:keyModalProvider)+'），可以开始对话了！有什么想聊的？');
+  addBotMsg('✅ 密钥已保存（'+(LLM_PROVIDERS[keyModalProvider]?LLM_PROVIDERS[keyModalProvider].name:keyModalProvider)+'）。硅基流动密钥同时用于AI聊天和AI绘图，可以开始创作了！');
 }
 // 检查密钥状态，已配置则隐藏引导
 function checkChatKeyState(){
@@ -3838,7 +4323,7 @@ function useInspire(title,desc){
 function saveApiKeys(){
   var keys={
     llm:{provider:document.getElementById('api-llm-provider')?.value||'',key:document.getElementById('api-llm-key')?.value||'',model:document.getElementById('api-llm-model')?.value||''},
-    image:{provider:document.getElementById('api-image-provider')?.value||'',key:document.getElementById('api-image-key')?.value||'',url:document.getElementById('api-image-url')?.value||''},
+    image:{provider:document.getElementById('api-image-provider')?.value||'',key:document.getElementById('api-image-key')?.value||'',model:document.getElementById('api-image-model')?.value||'',url:document.getElementById('api-image-url')?.value||''},
     video:{provider:document.getElementById('api-video-provider')?.value||'',key:document.getElementById('api-video-key')?.value||'',key2:document.getElementById('api-video-key2')?.value||''},
     tts:{provider:document.getElementById('api-tts-provider')?.value||'',key:document.getElementById('api-tts-key')?.value||''},
   };
@@ -4074,7 +4559,7 @@ renderMarketing();
 try{
   var saved=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');
   if(saved.llm&&saved.llm.key){document.getElementById('api-llm-key').value=saved.llm.key;if(saved.llm.model)document.getElementById('api-llm-model').value=saved.llm.model;}
-  if(saved.image&&saved.image.key){document.getElementById('api-image-key').value=saved.image.key;if(saved.image.url)document.getElementById('api-image-url').value=saved.image.url;}
+  if(saved.image&&saved.image.key){document.getElementById('api-image-key').value=saved.image.key;if(saved.image.url)document.getElementById('api-image-url').value=saved.image.url;if(saved.image.model)document.getElementById('api-image-model').value=saved.image.model;}
   if(saved.video&&saved.video.key){document.getElementById('api-video-key').value=saved.video.key;if(saved.video.key2)document.getElementById('api-video-key2').value=saved.video.key2;}
   if(saved.tts&&saved.tts.key){document.getElementById('api-tts-key').value=saved.tts.key;}
   updateApiKeysStatus(saved);
