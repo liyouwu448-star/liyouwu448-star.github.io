@@ -176,6 +176,7 @@ input,textarea,select{font-family:inherit}
 .wf-quick-manga .wf-quick-icon{background:rgba(212,160,23,.15)}
 .wf-quick-3d .wf-quick-icon{background:rgba(107,78,255,.15)}
 .wf-quick-live .wf-quick-icon{background:rgba(239,68,68,.15)}
+.wf-quick-novel .wf-quick-icon{background:rgba(139,92,246,.15)}
 .wf-quick-body{flex:1;min-width:0}
 .wf-quick-name{font-size:14px;font-weight:700;margin-bottom:2px}
 .wf-quick-desc{font-size:11px;color:var(--text-dim)}
@@ -434,6 +435,7 @@ input,textarea,select{font-family:inherit}
 .wf-selector-manga .wf-selector-icon{background:rgba(212,160,23,.15)}
 .wf-selector-3d .wf-selector-icon{background:rgba(107,78,255,.15)}
 .wf-selector-live .wf-selector-icon{background:rgba(239,68,68,.15)}
+.wf-selector-novel .wf-selector-icon{background:rgba(139,92,246,.15)}
 .wf-selector-info{flex:1;min-width:0}
 .wf-selector-name{font-size:15px;font-weight:700;margin-bottom:3px}
 .wf-selector-sub{font-size:11px;color:var(--text-dim);margin-bottom:6px}
@@ -651,10 +653,12 @@ body.chat-active #view-chat{padding:0!important}
 .wf-hero-3d{background:linear-gradient(135deg,#0a0a1a 0%,#1a1a3a 50%,#0a0a1a 100%)}
 .wf-hero-live{background:linear-gradient(135deg,#1a0a0a 0%,#2a1a1a 50%,#1a0a0a 100%)}
 .wf-hero-manga{background:linear-gradient(135deg,#0a1a0e 0%,#1a2a1e 50%,#0a1a0e 100%)}
+.wf-hero-novel{background:linear-gradient(135deg,#0f0a1a 0%,#1a1438 50%,#0f0a1a 100%)}
 .wf-hero-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:2px;margin-bottom:14px}
 .wf-hero-tag-3d{background:rgba(107,78,255,.15);color:#8b6fff;border:1px solid rgba(107,78,255,.4)}
 .wf-hero-tag-live{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.4)}
 .wf-hero-tag-manga{background:var(--gold-glow);color:var(--gold);border:1px solid var(--gold-d)}
+.wf-hero-tag-novel{background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.4)}
 .wf-hero h2{font-size:24px;font-weight:800;margin-bottom:8px}
 .wf-hero-desc{font-size:13px;color:var(--text-mid);max-width:600px;line-height:1.7}
 .wf-pipeline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
@@ -672,6 +676,19 @@ body.chat-active #view-chat{padding:0!important}
 .wf-config-label{font-size:11px;color:var(--text-dim)}
 .wf-config-value{font-size:13px;font-weight:500;padding:8px 10px;background:var(--bg-3);border-radius:6px;border:1px solid var(--border)}
 .wf-start-btn{width:100%;padding:16px;border-radius:12px;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:none;transition:.2s}
+
+/* ===== NOVEL CREATION ===== */
+.novel-control-panel{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.novel-control-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.novel-control-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.novel-input-group{display:flex;flex-direction:column;gap:6px}
+.novel-input-group label{font-size:12px;color:var(--text-dim);font-weight:500}
+.novel-progress-panel{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:20px}
+.novel-progress-title{font-size:15px;font-weight:700;margin-bottom:14px}
+.novel-progress-bar{width:100%;height:8px;background:var(--bg-3);border-radius:999px;overflow:hidden;margin-bottom:10px}
+.novel-progress-fill{height:100%;background:linear-gradient(90deg,#8b5cf6,#6366f1);border-radius:999px;transition:width .5s ease}
+.novel-progress-stats{font-size:12px;color:var(--text-dim);margin-bottom:14px}
+.novel-output{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:16px;max-height:500px;overflow-y:auto;font-size:13px;line-height:1.7;color:var(--text-mid)}
 
 /* ===== AUTO DISPATCH ===== */
 .dispatch-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:20px}
@@ -739,6 +756,10 @@ body.chat-active #view-chat{padding:0!important}
     </button>
     <div class="nav-divider"></div>
     <div class="nav-label">生产工作流</div>
+    <button class="nav-item" data-view="workflow-novel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      小说创作
+    </button>
     <button class="nav-item" data-view="workflow-manga">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       2D 国漫工作流
@@ -875,8 +896,16 @@ body.chat-active #view-chat{padding:0!important}
 
       <!-- 快速工作流入口 -->
       <div class="ws-panel" style="margin-bottom:20px">
-        <div class="ws-panel-title">生产线入口 <span>3大工作流</span></div>
+        <div class="ws-panel-title">生产线入口 <span>4大工作流</span></div>
         <div class="wf-quick-grid">
+          <div class="wf-quick-card wf-quick-novel" onclick="switchView('workflow-novel')">
+            <div class="wf-quick-icon">📖</div>
+            <div class="wf-quick-body">
+              <div class="wf-quick-name">小说创作工作流</div>
+              <div class="wf-quick-desc">AI多智能体 · 世界观/大纲/正文/润色</div>
+            </div>
+            <div class="wf-quick-arrow">→</div>
+          </div>
           <div class="wf-quick-card wf-quick-manga" onclick="switchView('workflow-manga')">
             <div class="wf-quick-icon">🎨</div>
             <div class="wf-quick-body">
@@ -1475,6 +1504,83 @@ body.chat-active #view-chat{padding:0!important}
       <button class="wf-start-btn" style="background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff" onclick="startLiveProject()">🎬 开始 AI 真人短剧</button>
     </div>
 
+    <!-- ===== 小说创作工作流 ===== -->
+    <div class="view" id="view-workflow-novel">
+      <div class="wf-hero wf-hero-novel">
+        <div class="wf-hero-tag wf-hero-tag-novel">📖 专业小说 · 多智能体 · 长篇连载</div>
+        <h2>专业小说创作工作流</h2>
+        <p class="wf-hero-desc">AI多智能体协作：世界观构建 → 大纲规划 → 角色设定 → 章节细纲 → 正文写作 → 润色审校。支持修仙、都市、玄幻、悬疑等全题材，自动保持前后一致性，可输出百万字长篇。</p>
+      </div>
+      <div class="wf-pipeline-grid" id="wfNovelStages"></div>
+      <div class="wf-config">
+        <div class="wf-config-title">⚙️ 小说创作配置</div>
+        <div class="wf-config-grid">
+          <div class="wf-config-item"><div class="wf-config-label">创作引擎</div><div class="wf-config-value">DeepSeek-V4-Pro / 豆包Seed 2.1 Pro</div></div>
+          <div class="wf-config-item"><div class="wf-config-label">智能体分工</div><div class="wf-config-value">策划·大纲·写手·编辑·校对 5Agent</div></div>
+          <div class="wf-config-item"><div class="wf-config-label">一致性管理</div><div class="wf-config-value">角色档案库 + 伏笔追踪 + 时间线</div></div>
+          <div class="wf-config-item"><div class="wf-config-label">单章字数</div><div class="wf-config-value">2000-5000字（可调）</div></div>
+          <div class="wf-config-item"><div class="wf-config-label">最大篇幅</div><div class="wf-config-value">百万字长篇连载</div></div>
+          <div class="wf-config-item"><div class="wf-config-label">输出格式</div><div class="wf-config-value">TXT / Markdown / EPUB</div></div>
+        </div>
+      </div>
+
+      <!-- 小说创作控制面板 -->
+      <div class="novel-control-panel">
+        <div class="novel-control-title">✍️ 小说创作控制台</div>
+        <div class="novel-control-grid">
+          <div class="novel-input-group">
+            <label>题材类型</label>
+            <select id="novelGenre" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+              <option value="xianxia">修仙玄幻</option>
+              <option value="urban">都市</option>
+              <option value="fantasy">奇幻</option>
+              <option value="scifi">科幻</option>
+              <option value="mystery">悬疑推理</option>
+              <option value="romance">言情</option>
+              <option value="history">历史</option>
+              <option value="wuxia">武侠</option>
+            </select>
+          </div>
+          <div class="novel-input-group">
+            <label>总字数目标</label>
+            <select id="novelWordCount" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+              <option value="5000">短篇 · 5千字</option>
+              <option value="30000">中篇 · 3万字</option>
+              <option value="100000" selected>长篇 · 10万字</option>
+              <option value="300000">大长篇 · 30万字</option>
+              <option value="1000000">超长篇 · 100万字</option>
+            </select>
+          </div>
+          <div class="novel-input-group">
+            <label>单章字数</label>
+            <select id="novelChapterWords" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+              <option value="2000">2000字/章</option>
+              <option value="3000" selected>3000字/章</option>
+              <option value="4000">4000字/章</option>
+              <option value="5000">5000字/章</option>
+            </select>
+          </div>
+        </div>
+        <div class="novel-input-group" style="margin-top:12px">
+          <label>故事核心设定（一句话描述你的故事）</label>
+          <textarea id="novelPremise" rows="3" placeholder="例：荒古时期，5岁孤儿石生偶然得到一个混沌葫芦，从此踏上修仙问鼎之路..." style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%;resize:vertical;font-family:inherit"></textarea>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+          <button class="wf-start-btn" style="background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;flex:1;min-width:200px" onclick="startNovelCreation()">📖 一键启动小说创作</button>
+          <button style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer" onclick="continueNovel()">▶️ 继续创作</button>
+          <button style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer" onclick="exportNovel()">📥 导出小说</button>
+        </div>
+      </div>
+
+      <!-- 小说创作进度 -->
+      <div class="novel-progress-panel" id="novelProgressPanel" style="display:none">
+        <div class="novel-progress-title">📊 创作进度</div>
+        <div class="novel-progress-bar"><div class="novel-progress-fill" id="novelProgressFill" style="width:0%"></div></div>
+        <div class="novel-progress-stats" id="novelProgressStats">准备中...</div>
+        <div class="novel-output" id="novelOutput"></div>
+      </div>
+    </div>
+
     <!-- ===== Auto派单中心 ===== -->
     <div class="view" id="view-autodispatch">
       <div style="font-size:18px;font-weight:700;margin-bottom:6px">Auto 派单中心</div>
@@ -1691,6 +1797,10 @@ body.chat-active #view-chat{padding:0!important}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
       资产库
     </button>
+    <button class="more-menu-item" data-view="workflow-novel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      小说创作
+    </button>
     <button class="more-menu-item" data-view="workflow-manga">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       2D国漫
@@ -1751,8 +1861,17 @@ body.chat-active #view-chat{padding:0!important}
 <div class="wf-selector-overlay" id="wfSelectorOverlay">
   <div class="wf-selector-modal">
     <div class="wf-selector-title">选择工作流</div>
-    <div class="wf-selector-desc">三大生产线，满足不同风格与预算需求</div>
+    <div class="wf-selector-desc">四大生产线，满足不同风格与预算需求</div>
     <div class="wf-selector-list">
+      <div class="wf-selector-item wf-selector-novel" onclick="switchView('workflow-novel');closeWfSelector();">
+        <div class="wf-selector-icon">📖</div>
+        <div class="wf-selector-info">
+          <div class="wf-selector-name">小说创作工作流</div>
+          <div class="wf-selector-sub">多智能体协作 · 世界观/大纲/正文/润色 · 百万字长篇</div>
+          <div class="wf-selector-tags"><span>DeepSeek-V4</span><span>5Agent</span><span>一致性追踪</span></div>
+        </div>
+        <div class="wf-selector-arrow">→</div>
+      </div>
       <div class="wf-selector-item wf-selector-manga" onclick="switchView('workflow-manga');closeWfSelector();">
         <div class="wf-selector-icon">🎨</div>
         <div class="wf-selector-info">
@@ -1987,7 +2106,7 @@ function switchView(view){
   document.querySelectorAll('.more-menu-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
   // 聊天视图：隐藏底部导航
   document.body.classList.toggle('chat-active',view==='chat');
-  const titles={workspace:'项目工作台',pipeline:'生产管线',assets:'资产库',newproject:'新建项目','workflow-manga':'2D国漫工作流','workflow-3d':'SSS级3D国漫','workflow-live':'AI真人短剧',serial:'长篇连载·批量生产','character-lib':'角色资产库',autodispatch:'Auto派单中心',marketing:'营销团队',chat:'AI 聊天助手',replicate:'视频复刻',inspire:'灵感库',settings:'引擎设置'};
+  const titles={workspace:'项目工作台',pipeline:'生产管线',assets:'资产库',newproject:'新建项目','workflow-novel':'小说创作工作流','workflow-manga':'2D国漫工作流','workflow-3d':'SSS级3D国漫','workflow-live':'AI真人短剧',serial:'长篇连载·批量生产','character-lib':'角色资产库',autodispatch:'Auto派单中心',marketing:'营销团队',chat:'AI 聊天助手',replicate:'视频复刻',inspire:'灵感库',settings:'引擎设置'};
   document.getElementById('headerTitle').textContent=titles[view]||'';
   document.querySelector('.main-content').scrollTop=0;
   closeMoreMenu();
@@ -2277,6 +2396,17 @@ var WF_LIVE=[
   {num:'07',icon:'🎵',name:'配乐音效',tech:'AI作曲 + 音效库',status:'○'},
   {num:'08',icon:'✨',name:'成片输出',tech:'1080p H.265',status:'○'},
 ];
+var WF_NOVEL=[
+  {num:'01',icon:'💡',name:'创意策划',tech:'Agent·策划师',status:'✓'},
+  {num:'02',icon:'🌍',name:'世界观构建',tech:'Agent·架构师',status:'✓'},
+  {num:'03',icon:'📋',name:'大纲规划',tech:'Agent·大纲师',status:'✓'},
+  {num:'04',icon:'👤',name:'角色设定',tech:'Agent·角色师',status:'✓'},
+  {num:'05',icon:'📝',name:'章节细纲',tech:'Agent·细纲师',status:'✓'},
+  {num:'06',icon:'✍️',name:'正文写作',tech:'Agent·写手',status:'✓'},
+  {num:'07',icon:'🔍',name:'润色审校',tech:'Agent·编辑',status:'✓'},
+  {num:'08',icon:'🔗',name:'一致性检查',tech:'Agent·校对',status:'✓'},
+  {num:'09',icon:'📥',name:'导出发布',tech:'TXT/MD/EPUB',status:'✓'},
+];
 
 function renderWorkflows(){
   const render=(id,stages)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=stages.map(s=>`
@@ -2290,6 +2420,7 @@ function renderWorkflows(){
   render('wfMangaStages',WF_MANGA);
   render('wf3dStages',WF_3D);
   render('wfLiveStages',WF_LIVE);
+  render('wfNovelStages',WF_NOVEL);
 }
 
 function start3DProject(){
@@ -2308,6 +2439,287 @@ function start3DProject(){
     var epsEl=document.getElementById('serialTotalEps');
     if(epsEl)epsEl.focus();
     alert('已切换到长篇连载生产线，请在「总集数」输入你想要的集数（如30），AI会自动分卷规划。');
+  }
+}
+
+// ===== 小说创作工作流 =====
+var novelProject=null; // 当前小说项目数据
+var novelRunning=false;
+
+function loadNovelProject(){
+  try{
+    novelProject=JSON.parse(localStorage.getItem('manga_novel_project')||'null');
+  }catch(e){novelProject=null;}
+  return novelProject;
+}
+function saveNovelProject(){
+  if(novelProject){
+    try{localStorage.setItem('manga_novel_project',JSON.stringify(novelProject));}catch(e){}
+  }
+}
+
+function getNovelGenreName(g){
+  var map={xianxia:'修仙玄幻',urban:'都市',fantasy:'奇幻',scifi:'科幻',mystery:'悬疑推理',romance:'言情',history:'历史',wuxia:'武侠'};
+  return map[g]||'修仙玄幻';
+}
+
+async function startNovelCreation(){
+  if(novelRunning){
+    alert('小说创作正在进行中，请等待完成或刷新页面。');
+    return;
+  }
+
+  var premise=document.getElementById('novelPremise')?.value||'';
+  var genre=document.getElementById('novelGenre')?.value||'xianxia';
+  var totalWords=parseInt(document.getElementById('novelWordCount')?.value||'100000');
+  var chapterWords=parseInt(document.getElementById('novelChapterWords')?.value||'3000');
+
+  if(!premise.trim()){
+    alert('请先填写故事核心设定（一句话描述你的故事）');
+    document.getElementById('novelPremise')?.focus();
+    return;
+  }
+
+  // 获取LLM配置
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){
+    alert('请先配置AI密钥（点击🔑设置），推荐使用硅基流动免费额度。');
+    return;
+  }
+
+  var totalChapters=Math.ceil(totalWords/chapterWords);
+  novelProject={
+    premise:premise.trim(),
+    genre:genre,
+    genreName:getNovelGenreName(genre),
+    totalWords:totalWords,
+    chapterWords:chapterWords,
+    totalChapters:totalChapters,
+    currentChapter:0,
+    worldview:'',
+    outline:'',
+    characters:[],
+    chapters:[],
+    status:'creating',
+    createdAt:Date.now(),
+  };
+  saveNovelProject();
+
+  novelRunning=true;
+  var panel=document.getElementById('novelProgressPanel');
+  var output=document.getElementById('novelOutput');
+  var fill=document.getElementById('novelProgressFill');
+  var stats=document.getElementById('novelProgressStats');
+  if(panel)panel.style.display='block';
+  if(output)output.innerHTML='';
+  if(fill)fill.style.width='0%';
+
+  try{
+    // 阶段1：创意策划
+    novelLog(output,'💡 阶段1/7：创意策划Agent启动...');
+    novelUpdateProgress(fill,stats,5,'创意策划中');
+    var creativePrompt='你是一个专业的小说创意策划师。请基于以下设定，生成一个完整的小说创意方案：\n\n题材：'+novelProject.genreName+'\n核心设定：'+novelProject.premise+'\n总字数目标：'+totalWords+'字（约'+totalChapters+'章）\n\n请输出：\n1. 书名（3个候选）\n2. 一句话简介\n3. 核心冲突\n4. 故事主题\n5. 目标读者';
+    var creativeResult=await callLLMOnce([{role:'user',content:creativePrompt}],llmConfig);
+    novelLog(output,creativeResult);
+    novelProject.creative=creativeResult;
+    saveNovelProject();
+
+    // 阶段2：世界观构建
+    novelUpdateProgress(fill,stats,15,'世界观构建中');
+    novelLog(output,'\n🌍 阶段2/7：世界观构建Agent启动...');
+    var worldPrompt='你是一个专业的小说世界观架构师。基于以下创意，构建完整的世界观设定：\n\n'+creativeResult+'\n\n请输出：\n1. 世界基础设定（时代背景、地理环境、社会结构）\n2. 力量体系（修炼等级/科技等级/魔法体系等）\n3. 重要势力/组织\n4. 历史背景与关键事件\n5. 世界规则与禁忌\n\n要求详细具体，可支撑'+totalWords+'字的长篇故事。';
+    var worldResult=await callLLMOnce([{role:'user',content:worldPrompt}],llmConfig);
+    novelLog(output,worldResult);
+    novelProject.worldview=worldResult;
+    saveNovelProject();
+
+    // 阶段3：大纲规划
+    novelUpdateProgress(fill,stats,25,'大纲规划中');
+    novelLog(output,'\n📋 阶段3/7：大纲规划Agent启动...');
+    var outlinePrompt='你是一个专业的小说大纲规划师。基于以下世界观和创意，规划完整的小说大纲：\n\n【创意】\n'+creativeResult+'\n\n【世界观】\n'+worldResult+'\n\n总章节数：'+totalChapters+'章，每章约'+chapterWords+'字\n\n请输出：\n1. 整体结构（起承转合四大卷，标注每卷包含的章节范围）\n2. 每卷的核心剧情线\n3. 主要转折点和高潮\n4. 伏笔铺设计划\n5. 前5章的详细章节大纲（每章包含：章节标题、主要事件、出场角色、结尾悬念）';
+    var outlineResult=await callLLMOnce([{role:'user',content:outlinePrompt}],llmConfig);
+    novelLog(output,outlineResult);
+    novelProject.outline=outlineResult;
+    saveNovelProject();
+
+    // 阶段4：角色设定
+    novelUpdateProgress(fill,stats,35,'角色设定中');
+    novelLog(output,'\n👤 阶段4/7：角色设定Agent启动...');
+    var charPrompt='你是一个专业的小说角色设计师。基于以下大纲和世界观，设计主要角色：\n\n【大纲】\n'+outlineResult+'\n\n【世界观】\n'+worldResult+'\n\n请为每个主要角色输出：\n1. 姓名、年龄、性别\n2. 外貌描写\n3. 性格特征（优点+缺点）\n4. 背景故事\n5. 核心动机与目标\n6. 人物弧光（成长轨迹）\n7. 特殊能力/技能\n8. 与其他角色的关系\n\n至少设计5个主要角色（主角+重要配角+反派）。';
+    var charResult=await callLLMOnce([{role:'user',content:charPrompt}],llmConfig);
+    novelLog(output,charResult);
+    novelProject.characters=charResult;
+    saveNovelProject();
+
+    // 阶段5-6：逐章写作
+    var chaptersToWrite=Math.min(totalChapters,3); // 先写前3章作为示例
+    for(var ch=1;ch<=chaptersToWrite;ch++){
+      var progress=35+Math.round((ch/chaptersToWrite)*50);
+      novelUpdateProgress(fill,stats,progress,'正在写第'+ch+'章正文');
+      novelLog(output,'\n✍️ 阶段5-6：写手Agent正在写第'+ch+'章...');
+
+      var chapterPrompt='你是一个专业的小说写手。请写第'+ch+'章的正文。\n\n【世界观】\n'+novelProject.worldview.substring(0,800)+'\n\n【大纲】\n'+novelProject.outline.substring(0,800)+'\n\n【角色设定】\n'+novelProject.characters.substring(0,600)+'\n\n'+(novelProject.chapters.length>0?'【上一章结尾】\n'+novelProject.chapters[novelProject.chapters.length-1].content.substring(Math.max(0,novelProject.chapters[novelProject.chapters.length-1].content.length-400)):'')+'\n\n要求：\n- 字数约'+chapterWords+'字\n- 场景描写生动，对话自然\n- 推进剧情，设置悬念\n- 保持人物性格一致\n- 输出格式：第X章 章节标题\\n\\n正文内容';
+      var chapterResult=await callLLMOnce([{role:'user',content:chapterPrompt}],llmConfig,ch===1?0.8:0.85);
+      novelProject.chapters.push({num:ch,content:chapterResult});
+      novelProject.currentChapter=ch;
+      saveNovelProject();
+      novelLog(output,'✅ 第'+ch+'章完成（'+chapterResult.length+'字）');
+    }
+
+    // 阶段7：润色
+    novelUpdateProgress(fill,stats,90,'润色审校中');
+    novelLog(output,'\n🔍 阶段7/7：编辑Agent润色审校...');
+    var polishPrompt='你是一个专业的小说编辑。请对以下章节进行润色审校，输出修改后的完整内容：\n\n'+novelProject.chapters.map(function(c){return c.content;}).join('\n\n---\n\n')+'\n\n润色要求：\n1. 修正语病和错别字\n2. 优化句子节奏\n3. 增强场景沉浸感\n4. 确保人物对话符合性格\n5. 检查前后一致性\n\n请直接输出润色后的全文。';
+    var polishResult=await callLLMOnce([{role:'user',content:polishPrompt}],llmConfig,0.6);
+    novelLog(output,'\n✅ 润色完成！');
+
+    novelUpdateProgress(fill,stats,100,'创作完成！');
+    novelLog(output,'\n🎉 小说创作完成！');
+    novelLog(output,'📊 统计：已完成 '+novelProject.chapters.length+'/'+totalChapters+' 章，共约 '+novelProject.chapters.reduce(function(s,c){return s+c.content.length;},0)+' 字');
+    novelLog(output,'💡 提示：点击「继续创作」可写更多章节，点击「导出小说」可下载全文。');
+
+    novelProject.status='paused';
+    novelProject.polished=polishResult;
+    saveNovelProject();
+
+  }catch(e){
+    novelLog(output,'\n❌ 创作出错：'+(e.message||e));
+    console.error('小说创作错误:',e);
+    if(novelProject)novelProject.status='error';
+    saveNovelProject();
+  }
+
+  novelRunning=false;
+}
+
+async function continueNovel(){
+  if(novelRunning){alert('创作进行中，请等待完成。');return;}
+  if(!loadNovelProject()||!novelProject){
+    alert('请先点击「一键启动小说创作」创建项目。');
+    return;
+  }
+  if(novelProject.status==='completed'){alert('小说已完成创作。');return;}
+
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){alert('请先配置AI密钥。');return;}
+
+  novelRunning=true;
+  var output=document.getElementById('novelOutput');
+  var fill=document.getElementById('novelProgressFill');
+  var stats=document.getElementById('novelProgressStats');
+  var panel=document.getElementById('novelProgressPanel');
+  if(panel)panel.style.display='block';
+
+  var nextCh=novelProject.currentChapter+1;
+  if(nextCh>novelProject.totalChapters){
+    novelLog(output,'🎉 全部章节已完成！');
+    novelRunning=false;
+    return;
+  }
+
+  try{
+    var batchCount=Math.min(3,novelProject.totalChapters-nextCh+1); // 每次写3章
+    for(var i=0;i<batchCount;i++){
+      var ch=nextCh+i;
+      if(ch>novelProject.totalChapters)break;
+      var progress=Math.round((ch/novelProject.totalChapters)*100);
+      novelUpdateProgress(fill,stats,progress,'正在写第'+ch+'章');
+      novelLog(output,'\n✍️ 写手Agent正在写第'+ch+'章...');
+
+      var prevContent=novelProject.chapters.length>0?novelProject.chapters[novelProject.chapters.length-1].content:'';
+      var chapterPrompt='你是一个专业的小说写手。请写第'+ch+'章的正文。\n\n【世界观】\n'+novelProject.worldview.substring(0,800)+'\n\n【大纲】\n'+novelProject.outline.substring(0,800)+'\n\n【角色设定】\n'+novelProject.characters.substring(0,600)+'\n\n'+(prevContent?'【上一章结尾】\n'+prevContent.substring(Math.max(0,prevContent.length-400)):'')+'\n\n要求：\n- 字数约'+novelProject.chapterWords+'字\n- 场景描写生动，对话自然\n- 推进剧情，设置悬念\n- 保持人物性格一致\n- 输出格式：第'+ch+'章 章节标题\\n\\n正文内容';
+      var chapterResult=await callLLMOnce([{role:'user',content:chapterPrompt}],llmConfig,0.85);
+      novelProject.chapters.push({num:ch,content:chapterResult});
+      novelProject.currentChapter=ch;
+      saveNovelProject();
+      novelLog(output,'✅ 第'+ch+'章完成（'+chapterResult.length+'字）');
+    }
+    novelLog(output,'\n🎉 本批完成！已写 '+novelProject.chapters.length+'/'+novelProject.totalChapters+' 章');
+  }catch(e){
+    novelLog(output,'\n❌ 出错：'+(e.message||e));
+  }
+  novelRunning=false;
+}
+
+function exportNovel(){
+  if(!loadNovelProject()||!novelProject||novelProject.chapters.length===0){
+    alert('暂无小说内容可导出，请先创作。');
+    return;
+  }
+  var title='《'+novelProject.premise.substring(0,10)+'...》';
+  var header='# '+title+'\n\n题材：'+novelProject.genreName+'\n总字数目标：'+novelProject.totalWords+'字\n已完成：'+novelProject.chapters.length+'章\n\n---\n\n';
+  var body=novelProject.chapters.map(function(c){return c.content;}).join('\n\n---\n\n');
+  var fullContent=header+body;
+  var blob=new Blob([fullContent],{type:'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download=title+'.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function novelLog(outputEl,text){
+  if(!outputEl)return;
+  var div=document.createElement('div');
+  div.style.cssText='margin-bottom:8px;white-space:pre-wrap;word-break:break-all;line-height:1.6';
+  div.textContent=text;
+  outputEl.appendChild(div);
+  outputEl.scrollTop=outputEl.scrollHeight;
+}
+
+function novelUpdateProgress(fillEl,statsEl,percent,label){
+  if(fillEl)fillEl.style.width=percent+'%';
+  if(statsEl)statsEl.textContent=label+' · '+percent+'%';
+}
+
+// 单次调用LLM（非流式，用于小说创作）
+async function callLLMOnce(messages,llmConfig,temperature){
+  var config=LLM_PROVIDERS[llmConfig.provider];
+  if(!config)throw new Error('未知服务商：'+llmConfig.provider);
+  var model=llmConfig.model||config.defaultModel;
+
+  if(llmConfig.provider==='anthropic'){
+    var systemContent='';
+    var chatMessages=[];
+    for(var i=0;i<messages.length;i++){
+      if(messages[i].role==='system'){systemContent+=messages[i].content+'\n';}
+      else{chatMessages.push({role:messages[i].role,content:messages[i].content});}
+    }
+    var resp=await fetch(config.base,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':llmConfig.key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:model,max_tokens:8192,temperature:temperature||0.7,system:systemContent||undefined,messages:chatMessages})
+    });
+    if(!resp.ok){
+      var t=await resp.text();
+      throw new Error('HTTP '+resp.status+': '+t.substring(0,300));
+    }
+    var data=await resp.json();
+    return data.content?data.content.map(function(c){return c.text||'';}).join(''):'';
+  }else{
+    var resp=await fetch(config.base,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+llmConfig.key
+      },
+      body:JSON.stringify({model:model,messages:messages,max_tokens:8192,temperature:temperature||0.7})
+    });
+    if(!resp.ok){
+      var t=await resp.text();
+      var err={};try{err=JSON.parse(t);}catch(e){}
+      throw new Error(err.error?.message||('HTTP '+resp.status+': '+t.substring(0,300)));
+    }
+    var data=await resp.json();
+    return data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:'';
   }
 }
 function startLiveProject(){
@@ -2813,6 +3225,7 @@ function detectDispatchIntent(text){
   var rules=[
     {keywords:['新建','创建','开个','新建项目','开始一个'],view:'newproject',label:'新建项目',icon:'✨'},
     {keywords:['2d','国漫','2d国漫','漫画工作流'],view:'workflow-manga',label:'2D国漫工作流',icon:'📚'},
+    {keywords:['小说','写小说','写书','写文','创作小说','小说创作','写一部','写个故事'],view:'workflow-novel',label:'小说创作工作流',icon:'📖'},
     {keywords:['3d','sss','3d国漫','三维'],view:'workflow-3d',label:'SSS级3D国漫',icon:'🎮'},
     {keywords:['真人','短剧','实拍'],view:'workflow-live',label:'AI真人短剧',icon:'🎬'},
     {keywords:['连载','长篇','批量','多集'],view:'serial',label:'长篇连载生产线',icon:'📖'},
