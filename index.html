@@ -226,7 +226,7 @@ input,textarea,select{font-family:inherit}
 .pipe-stages{display:flex;flex-direction:column;gap:12px}
 .pipe-stage{
   background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r);
-  display:flex;overflow:hidden;transition:.2s;cursor:pointer;
+  display:flex;flex-wrap:wrap;overflow:hidden;transition:.2s;cursor:pointer;
 }
 .pipe-stage:hover{border-color:var(--border-l)}
 .pipe-stage.done{border-left:3px solid var(--gold)}
@@ -267,6 +267,7 @@ input,textarea,select{font-family:inherit}
 /* Stage detail panel */
 .pipe-stage-detail{
   display:none;padding:16px 20px;border-top:1px solid var(--border);background:var(--bg);
+  width:100%;flex-basis:100%;order:1;
 }
 .pipe-stage.expanded .pipe-stage-detail{display:block}
 .stage-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -664,6 +665,7 @@ body.chat-active #view-chat{padding:0!important}
 .wf-pipeline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
 .wf-stage-card{background:var(--bg-2);border:1px solid var(--border);border-radius:10px;padding:14px;transition:.2s;cursor:pointer;position:relative}
 .wf-stage-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.wf-stage-card.expanded{border-color:var(--gold);background:var(--bg-3)}
 .wf-stage-num{position:absolute;top:10px;right:12px;font-size:20px;font-weight:900;color:var(--border-l);font-family:monospace}
 .wf-stage-icon{font-size:24px;margin-bottom:8px}
 .wf-stage-name{font-size:13px;font-weight:600;margin-bottom:4px}
@@ -2691,62 +2693,81 @@ document.getElementById('wfSelectorOverlay').addEventListener('click',function(e
 
 // ===== WORKFLOW STAGES =====
 var WF_MANGA=[
-  {num:'01',icon:'📖',name:'写小说',tech:'LLM创作',status:'✓'},
-  {num:'02',icon:'🎭',name:'转剧本',tech:'结构化场次',status:'✓'},
-  {num:'03',icon:'👤',name:'人物资产',tech:'LoRA训练',status:'✓'},
-  {num:'04',icon:'🎬',name:'分镜',tech:'逐镜脚本',status:'✓'},
-  {num:'05',icon:'🎨',name:'绘图',tech:'SDXL+LoRA',status:'✓'},
-  {num:'06',icon:'🎥',name:'图生视频',tech:'多模型路由',status:'✓'},
-  {num:'07',icon:'🎵',name:'动效音效',tech:'Ken Burns',status:'✓'},
-  {num:'08',icon:'🗣️',name:'TTS配音',tech:'多角色',status:'✓'},
-  {num:'09',icon:'✨',name:'成片合成',tech:'FFmpeg',status:'✓'},
+  {num:'01',icon:'📖',name:'写小说',tech:'LLM创作',status:'✓',desc:'AI大模型根据故事设定创作完整小说章节，包含世界观、角色背景、情节发展。'},
+  {num:'02',icon:'🎭',name:'转剧本',tech:'结构化场次',status:'✓',desc:'将小说自动拆分为可拍摄场次，每场标注场景、人物、情绪、时长、台词。'},
+  {num:'03',icon:'👤',name:'人物资产',tech:'LoRA训练',status:'✓',desc:'为每个角色训练LoRA权重，生成正/侧/背/表情四面设定图，确保跨镜一致性。'},
+  {num:'04',icon:'🎬',name:'分镜',tech:'逐镜脚本',status:'✓',desc:'每场拆分为多个镜头，标注景别、机位、运镜方式、时长，生成完整分镜表。'},
+  {num:'05',icon:'🎨',name:'绘图',tech:'SDXL+LoRA',status:'✓',desc:'根据分镜描述+角色LoRA权重逐镜生成画面，注入参考图保证角色一致性。'},
+  {num:'06',icon:'🎥',name:'图生视频',tech:'多模型路由',status:'✓',desc:'智能路由引擎按场景选模型：Veo/Kling/Sora，静态图转为动态视频。'},
+  {num:'07',icon:'🎵',name:'动效音效',tech:'Ken Burns',status:'✓',desc:'FFmpeg zoompan实现Ken Burns运镜，合成17种场景氛围音效。'},
+  {num:'08',icon:'🗣️',name:'TTS配音',tech:'多角色',status:'✓',desc:'多角色拼音TTS+情绪化音色处理，5角色各自独立配置音高/语速/混响。'},
+  {num:'09',icon:'✨',name:'成片合成',tech:'FFmpeg',status:'✓',desc:'视频音频mux合并、concat拼接、字幕烧录、响度归一化，输出H.264成片。'},
 ];
 var WF_3D=[
-  {num:'01',icon:'📖',name:'剧本创作',tech:'LLM + 分镜',status:'✓'},
-  {num:'02',icon:'👤',name:'3D角色建模',tech:'Meshy AI / Tripo3D',status:'◐'},
-  {num:'03',icon:'🎨',name:'材质贴图',tech:'AI PBR + 手绘',status:'◐'},
-  {num:'04',icon:'🦴',name:'骨骼绑定',tech:'AutoRig + Mixamo',status:'◐'},
-  {num:'05',icon:'🏃',name:'动捕驱动',tech:'MotionGPT + 动捕库',status:'○'},
-  {num:'06',icon:'🌅',name:'场景搭建',tech:'UE5 + AI 场景',status:'○'},
-  {num:'07',icon:'💡',name:'光影渲染',tech:'Lumen + DLSS 3.5',status:'○'},
-  {num:'08',icon:'✨',name:'特效合成',tech:'Niagara + AI粒子',status:'○'},
-  {num:'09',icon:'🎬',name:'成片输出',tech:'4K HDR 60fps',status:'○'},
+  {num:'01',icon:'📖',name:'剧本创作',tech:'LLM + 分镜',status:'✓',desc:'AI创作剧本并自动拆分为3D拍摄分镜，标注场景需求、角色动作、镜头运动。'},
+  {num:'02',icon:'👤',name:'3D角色建模',tech:'Meshy AI / Tripo3D',status:'◐',desc:'使用AI 3D生成工具从概念图自动生成3D角色模型，支持PBR材质和骨骼。'},
+  {num:'03',icon:'🎨',name:'材质贴图',tech:'AI PBR + 手绘',status:'◐',desc:'AI生成PBR材质贴图（法线/粗糙度/金属度），手绘微调细节，达到影视级质感。'},
+  {num:'04',icon:'🦴',name:'骨骼绑定',tech:'AutoRig + Mixamo',status:'◐',desc:'自动骨骼绑定+权重绘制，接入Mixamo动作库，支持全身骨骼动画。'},
+  {num:'05',icon:'🏃',name:'动捕驱动',tech:'MotionGPT + 动捕库',status:'○',desc:'MotionGPT文本生成动作+专业动捕库，实现自然流畅的角色表演。'},
+  {num:'06',icon:'🌅',name:'场景搭建',tech:'UE5 + AI 场景',status:'○',desc:'UE5搭建3D场景，AI辅助生成地形/植被/建筑，Lumen全局光照。'},
+  {num:'07',icon:'💡',name:'光影渲染',tech:'Lumen + DLSS 3.5',status:'○',desc:'UE5 Lumen动态全局光照+DLSS 3.5超分辨率，输出4K HDR画质。'},
+  {num:'08',icon:'✨',name:'特效合成',tech:'Niagara + AI粒子',status:'○',desc:'Niagara粒子系统制作特效（法术/爆炸/天气），AI辅助生成粒子纹理。'},
+  {num:'09',icon:'🎬',name:'成片输出',tech:'4K HDR 60fps',status:'○',desc:'最终渲染输出4K HDR 60fps成片，支持Dolby Vision色彩，院线级画质。'},
 ];
 var WF_LIVE=[
-  {num:'01',icon:'📖',name:'剧本创作',tech:'LLM + 分镜',status:'✓'},
-  {num:'02',icon:'👤',name:'数字人形象',tech:'HeyGen / D-ID',status:'✓'},
-  {num:'03',icon:'🎬',name:'场景生成',tech:'SDXL + ControlNet',status:'✓'},
-  {num:'04',icon:'🗣️',name:'真人级配音',tech:'CosyVoice / 火山TTS',status:'✓'},
-  {num:'05',icon:'😐',name:'表情驱动',tech:'Wav2Lip + EmoPortraits',status:'◐'},
-  {num:'06',icon:'🎥',name:'镜头合成',tech:'AI运镜 + 实景融合',status:'○'},
-  {num:'07',icon:'🎵',name:'配乐音效',tech:'AI作曲 + 音效库',status:'○'},
-  {num:'08',icon:'✨',name:'成片输出',tech:'1080p H.265',status:'○'},
+  {num:'01',icon:'📖',name:'剧本创作',tech:'LLM + 分镜',status:'✓',desc:'AI创作真人短剧剧本，自动拆分为场次和镜头，标注场景/情绪/时长。'},
+  {num:'02',icon:'👤',name:'数字人形象',tech:'HeyGen / D-ID',status:'✓',desc:'使用HeyGen/D-ID生成逼真数字人形象，支持自定义外貌、年龄、性别。'},
+  {num:'03',icon:'🎬',name:'场景生成',tech:'SDXL + ControlNet',status:'✓',desc:'SDXL+ControlNet生成逼真实景背景，支持室内/室外/特定城市场景。'},
+  {num:'04',icon:'🗣️',name:'真人级配音',tech:'CosyVoice / 火山TTS',status:'✓',desc:'CosyVoice/火山TTS生成真人级语音，支持多角色、情绪化、自然语调。'},
+  {num:'05',icon:'😐',name:'表情驱动',tech:'Wav2Lip + EmoPortraits',status:'◐',desc:'Wav2Lip唇形同步+EmoPortraits表情驱动，实现语音到表情的自然映射。'},
+  {num:'06',icon:'🎥',name:'镜头合成',tech:'AI运镜 + 实景融合',status:'○',desc:'AI运镜+实景融合，多镜头拼接，自动添加转场效果。'},
+  {num:'07',icon:'🎵',name:'配乐音效',tech:'AI作曲 + 音效库',status:'○',desc:'AI自动作曲+音效库匹配，按场景情绪生成BGM和音效。'},
+  {num:'08',icon:'✨',name:'成片输出',tech:'1080p H.265',status:'○',desc:'最终合成1080p H.265成片，含字幕、配乐、音效，输出MP4。'},
 ];
 var WF_NOVEL=[
-  {num:'01',icon:'💡',name:'创意策划',tech:'Agent·策划师',status:'✓'},
-  {num:'02',icon:'🌍',name:'世界观构建',tech:'Agent·架构师',status:'✓'},
-  {num:'03',icon:'📋',name:'大纲规划',tech:'Agent·大纲师',status:'✓'},
-  {num:'04',icon:'👤',name:'角色设定',tech:'Agent·角色师',status:'✓'},
-  {num:'05',icon:'📝',name:'章节细纲',tech:'Agent·细纲师',status:'✓'},
-  {num:'06',icon:'✍️',name:'正文写作',tech:'Agent·写手',status:'✓'},
-  {num:'07',icon:'🔍',name:'润色审校',tech:'Agent·编辑',status:'✓'},
-  {num:'08',icon:'🔗',name:'一致性检查',tech:'Agent·校对',status:'✓'},
-  {num:'09',icon:'📥',name:'导出发布',tech:'TXT/MD/EPUB',status:'✓'},
+  {num:'01',icon:'💡',name:'创意策划',tech:'Agent·策划师',status:'✓',desc:'根据用户输入的核心设定，AI策划师生成书名候选、一句话简介、核心冲突、故事主题和目标读者画像。'},
+  {num:'02',icon:'🌍',name:'世界观构建',tech:'Agent·架构师',status:'✓',desc:'AI架构师构建完整世界观体系：修炼体系/社会结构/地理环境/历史背景/势力分布，确保故事逻辑自洽。'},
+  {num:'03',icon:'📋',name:'大纲规划',tech:'Agent·大纲师',status:'✓',desc:'AI大纲师根据世界观和创意方案，规划全卷大纲，每卷包含核心事件、转折点、高潮安排，章节数量自由设定。'},
+  {num:'04',icon:'👤',name:'角色设定',tech:'Agent·角色师',status:'✓',desc:'AI角色师为每个主要角色创建详细设定卡：外貌、性格、背景故事、成长弧线、人物关系网络、标志性台词。'},
+  {num:'05',icon:'📝',name:'章节细纲',tech:'Agent·细纲师',status:'✓',desc:'AI细纲师将大纲拆分为每章详细细纲：场景列表、情节节奏、对话要点、悬念设置，确保每章都有钩子。'},
+  {num:'06',icon:'✍️',name:'正文写作',tech:'Agent·写手',status:'✓',desc:'AI写手根据细纲逐章创作正文，自动保持人物性格一致、剧情连贯，每章约3000-5000字，支持断点续写。'},
+  {num:'07',icon:'🔍',name:'润色审校',tech:'Agent·编辑',status:'✓',desc:'AI编辑对全文进行润色：优化文笔节奏、修正逻辑漏洞、增强对话自然度、统一术语、检查前后一致性。'},
+  {num:'08',icon:'🔗',name:'一致性检查',tech:'Agent·校对',status:'✓',desc:'AI校对员做最终一致性检查：人物名字/称呼、时间线逻辑、地理方位、实力等级体系、伏笔回收。'},
+  {num:'09',icon:'📥',name:'导出发布',tech:'TXT/MD/EPUB',status:'✓',desc:'一键导出为多种格式：TXT纯文本、Markdown带格式、EPUB电子书。包含封面、目录、章节标题。'},
 ];
 
 function renderWorkflows(){
-  const render=(id,stages)=>{const el=document.getElementById(id);if(!el)return;el.innerHTML=stages.map(s=>`
-    <div class="wf-stage-card">
+  const render=(id,stages)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.innerHTML=stages.map((s,i)=>`
+    <div class="wf-stage-card" onclick="toggleWfStage(this,'${id}',${i})">
       <div class="wf-stage-num">${s.num}</div>
       <div class="wf-stage-icon">${s.icon}</div>
       <div class="wf-stage-name">${s.name}</div>
       <div class="wf-stage-tech">${s.tech}</div>
       <div class="wf-stage-status" style="color:${s.status==='✓'?'var(--gold)':s.status==='◐'?'var(--brand)':'var(--text-dim)'}">${s.status==='✓'?'已完成':s.status==='◐'?'进行中':'待启动'}</div>
-    </div>`).join('');};
+      <div class="wf-stage-desc" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--text-mid);line-height:1.7">${s.desc||'暂无描述'}</div>
+    </div>`).join('');
+  };
   render('wfMangaStages',WF_MANGA);
   render('wf3dStages',WF_3D);
   render('wfLiveStages',WF_LIVE);
   render('wfNovelStages',WF_NOVEL);
+}
+function toggleWfStage(el,id,idx){
+  var data={wfMangaStages:WF_MANGA,wf3dStages:WF_3D,wfLiveStages:WF_LIVE,wfNovelStages:WF_NOVEL}[id];
+  if(!data||!data[idx])return;
+  var descEl=el.querySelector('.wf-stage-desc');
+  if(!descEl)return;
+  var isShown=descEl.style.display!=='none';
+  // 先关闭同组所有展开
+  el.parentNode.querySelectorAll('.wf-stage-desc').forEach(function(d){d.style.display='none';});
+  el.parentNode.querySelectorAll('.wf-stage-card').forEach(function(c){c.classList.remove('expanded');});
+  if(!isShown){
+    descEl.style.display='block';
+    el.classList.add('expanded');
+  }
 }
 
 function start3DProject(){
