@@ -609,12 +609,16 @@ body.chat-active #view-chat{padding:0!important}
 .stream-cursor{display:inline-block;width:2px;height:18px;background:var(--gold);animation:blink 1s infinite;vertical-align:middle;margin-left:2px}
 @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
 
-/* TTS 朗读控制条 - 改为气泡弹出菜单 */
-.tts-bar{display:none}
+/* 朗读控制 - 气泡弹出菜单 */
 .bubble-actions{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);flex-wrap:wrap}
 .bubble-action-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);font-size:14px;cursor:pointer;transition:.15s}
 .bubble-action-btn:hover{border-color:var(--gold);color:var(--gold)}
 .bubble-action-btn.active{background:var(--gold-glow);border-color:var(--gold);color:var(--gold)}
+
+/* 朗读控制按钮 */
+.read-controls{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.read-btn{padding:4px 12px;border-radius:6px;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);font-size:13px;cursor:pointer;transition:.15s}
+.read-btn:hover{border-color:var(--gold);color:var(--gold)}
 
 /* 派单提示条 */
 .dispatch-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--bg-2);border:1px solid var(--gold);border-radius:12px;padding:10px 18px;display:flex;align-items:center;gap:10px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastIn .3s ease;max-width:calc(100vw - 24px)}
@@ -3931,7 +3935,7 @@ async function sendChat(){
       saveChatHistory();
       
       // 自动朗读
-      setTimeout(function(){ttsPlay(msgId);},300);
+      setTimeout(function(){autoReadMessage(msgId);},300);
       
       // 派单提示（需用户确认，不自动跳转）
       if(dispatchResult){
@@ -4282,8 +4286,8 @@ function toggleBubbleActions(bubble,msgId,rawText){
   // 关闭其他气泡的菜单
   document.querySelectorAll('.bubble-actions').forEach(function(el){el.remove();});
   
-  var isPlaying=ttsCurrentMsgId===msgId&&ttsUtterance;
-  var isPaused=ttsPaused&&ttsCurrentMsgId===msgId;
+  var isPlaying=readCurrentMsgId===msgId&&readSynth;
+  var isPaused=readPaused&&readCurrentMsgId===msgId;
   
   var bar=document.createElement('div');
   bar.className='bubble-actions';
@@ -4301,13 +4305,13 @@ function toggleBubbleActions(bubble,msgId,rawText){
   if(isPlaying&&!isPaused){
     btnTTS.textContent='⏸ 暂停';
     btnTTS.classList.add('active');
-    btnTTS.onclick=function(e){e.stopPropagation();ttsPause(msgId);bar.remove();};
+    btnTTS.onclick=function(e){e.stopPropagation();pauseReading();bar.remove();};
   }else if(isPaused){
     btnTTS.textContent='▶ 继续';
-    btnTTS.onclick=function(e){e.stopPropagation();ttsResume(msgId);bar.remove();};
+    btnTTS.onclick=function(e){e.stopPropagation();resumeReading();bar.remove();};
   }else{
     btnTTS.textContent='🔊 朗读';
-    btnTTS.onclick=function(e){e.stopPropagation();ttsPlay(msgId);bar.remove();};
+    btnTTS.onclick=function(e){e.stopPropagation();startReading(msgId);bar.remove();};
   }
   bar.appendChild(btnTTS);
   
@@ -4316,18 +4320,9 @@ function toggleBubbleActions(bubble,msgId,rawText){
     var btnStop=document.createElement('button');
     btnStop.className='bubble-action-btn';
     btnStop.textContent='⬛ 停止';
-    btnStop.onclick=function(e){e.stopPropagation();ttsStop(msgId);bar.remove();};
+    btnStop.onclick=function(e){e.stopPropagation();stopReading();bar.remove();};
     bar.appendChild(btnStop);
   }
-  
-  // 引擎选择
-  var sel=document.createElement('select');
-  sel.className='bubble-action-btn';
-  sel.style.padding='4px 8px';
-  sel.innerHTML='<option value="free">免费引擎</option><option value="doubao">豆包引擎</option>';
-  sel.value=ttsEngine;
-  sel.onchange=function(){ttsEngine=this.value;};
-  bar.appendChild(sel);
   
   bubble.appendChild(bar);
 }
@@ -4369,235 +4364,183 @@ function showToast(msg){
   setTimeout(function(){t.remove();},2000);
 }
 
-// ===== TTS 朗读功能 =====
-var ttsEngine='free'; // 'free' 或 'doubao'
-var ttsCurrentMsgId=null;
-var ttsUtterance=null;
-var ttsPaused=false;
+// ===== 自动朗读功能（全新实现 · 支持暂停/继续） =====
+var autoReadEnabled=true; // 默认开启自动朗读
+var readSynth=null;       // SpeechSynthesisUtterance 实例
+var readCurrentMsgId=null;// 当前朗读的消息ID
+var readPaused=false;     // 是否暂停
+var readQueue=[];         // 朗读队列（分段文本）
 
-// 获取消息纯文本
 function getMsgText(msgId){
   var el=document.querySelector('[data-msg-id="'+msgId+'"] .chat-msg-text');
   if(!el)return '';
   return el.textContent||'';
 }
 
-function ttsPlay(msgId){
-  ttsStop(msgId);
-  ttsCurrentMsgId=msgId;
-  var text=getMsgText(msgId);
-  if(!text)return;
-  
-  var engineSel=document.getElementById('ttsEngine-'+msgId);
-  var engine=engineSel?engineSel.value:ttsEngine;
-  
-  if(engine==='doubao'){
-    ttsPlayDoubao(msgId,text);
-  }else{
-    ttsPlayFree(msgId,text);
+// 切换自动朗读开关
+function toggleAutoRead(){
+  autoReadEnabled=!autoReadEnabled;
+  if(!autoReadEnabled)stopReading();
+  var btn=document.getElementById('autoReadToggle');
+  if(btn){
+    btn.textContent=autoReadEnabled?'🔊 朗读:开':'🔇 朗读:关';
+    btn.classList.toggle('active',autoReadEnabled);
   }
+  try{localStorage.setItem('manga_autoread',autoReadEnabled?'1':'0');}catch(e){}
 }
 
-function ttsPlayFree(msgId,text){
+// 自动朗读入口：AI回复完成后调用
+function autoReadMessage(msgId){
+  if(!autoReadEnabled)return;
+  startReading(msgId);
+}
+
+// 开始朗读
+function startReading(msgId){
+  stopReading(); // 先停止之前的
+  readCurrentMsgId=msgId;
+  var text=getMsgText(msgId);
+  if(!text)return;
+
   if(!('speechSynthesis'in window)){
-    addBotMsg('⚠️ 当前浏览器不支持语音朗读功能。');
+    console.log('[朗读] 浏览器不支持语音合成');
     return;
   }
-  window.speechSynthesis.cancel();
-  ttsUtterance=new SpeechSynthesisUtterance(text);
-  ttsUtterance.lang='zh-CN';
-  ttsUtterance.rate=1.0;
-  ttsUtterance.pitch=1.0;
-  
-  // 尝试使用中文语音
+
+  // 清理模型标签等非朗读内容
+  text=text.replace(/^---$/gm,'').replace(/💬.*$/gm,'').trim();
+  if(!text)return;
+
+  // 分段朗读（避免长文本截断）
+  readQueue=splitReadText(text,200);
+  readPaused=false;
+  readNextSegment();
+  updateReadUI(msgId,'playing');
+}
+
+function splitReadText(text,maxLen){
+  var segments=[];
+  var sentences=text.split(/([。！？\n.!?；;])/);
+  var current='';
+  for(var i=0;i<sentences.length;i++){
+    current+=sentences[i];
+    if(current.length>=maxLen){
+      segments.push(current);
+      current='';
+    }
+  }
+  if(current.trim())segments.push(current);
+  return segments.filter(function(s){return s.trim();});
+}
+
+var readSegIndex=0;
+function readNextSegment(){
+  if(readPaused)return;
+  if(readSegIndex>=readQueue.length){
+    finishReading();
+    return;
+  }
+  var seg=readQueue[readSegIndex];
+  readSynth=new SpeechSynthesisUtterance(seg);
+  readSynth.lang='zh-CN';
+  readSynth.rate=1.0;
+  readSynth.pitch=1.0;
+
+  // 尝试中文语音
   var voices=window.speechSynthesis.getVoices();
-  var zhVoice=null;
   for(var i=0;i<voices.length;i++){
     if(voices[i].lang.indexOf('zh')>=0){
-      zhVoice=voices[i];
+      readSynth.voice=voices[i];
       break;
     }
   }
-  if(zhVoice)ttsUtterance.voice=zhVoice;
-  
-  ttsUtterance.onend=function(){
-    ttsResetUI(msgId);
+
+  readSynth.onend=function(){
+    if(readPaused)return;
+    readSegIndex++;
+    readNextSegment();
   };
-  ttsUtterance.onerror=function(){
-    ttsResetUI(msgId);
+  readSynth.onerror=function(){
+    if(readPaused)return;
+    readSegIndex++;
+    readNextSegment();
   };
-  
-  window.speechSynthesis.speak(ttsUtterance);
-  ttsPaused=false;
-  ttsShowPlayingUI(msgId);
+
+  window.speechSynthesis.speak(readSynth);
 }
 
-// 豆包TTS朗读
-async function ttsPlayDoubao(msgId,text){
-  var keys={};
-  try{keys=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
-  
-  if(!keys.doubao_tts||!keys.doubao_tts.key){
-    // 没有豆包TTS密钥，回退到免费
-    addBotMsg('⚠️ 未配置豆包TTS密钥，已自动切换到免费朗读引擎。\n\n如需使用豆包优质语音，请在「设置 → 密钥管理」中配置火山引擎TTS密钥。');
-    var engineSel=document.getElementById('ttsEngine-'+msgId);
-    if(engineSel)engineSel.value='free';
-    ttsPlayFree(msgId,text);
-    return;
-  }
-  
-  ttsShowPlayingUI(msgId);
-  var audioEl=document.getElementById('ttsAudio-'+msgId);
-  if(!audioEl){
-    audioEl=document.createElement('audio');
-    audioEl.id='ttsAudio-'+msgId;
-    audioEl.style.display='none';
-    document.body.appendChild(audioEl);
-  }
-  
-  try{
-    // 分段处理（豆包TTS单次限制）
-    var segments=ttsSplitText(text,500);
-    var allBlobs=[];
-    for(var i=0;i<segments.length;i++){
-      var blob=await ttsDoubaoSegment(keys.doubao_tts,segments[i]);
-      allBlobs.push(blob);
-    }
-    var fullBlob=new Blob(allBlobs,{type:'audio/mp3'});
-    audioEl.src=URL.createObjectURL(fullBlob);
-    audioEl.onended=function(){
-      ttsResetUI(msgId);
-    };
-    audioEl.play();
-  }catch(e){
-    addBotMsg('⚠️ 豆包TTS调用失败：'+(e.message||'未知错误')+'\n\n已自动切换到免费朗读引擎。');
-    var engineSel=document.getElementById('ttsEngine-'+msgId);
-    if(engineSel)engineSel.value='free';
-    ttsPlayFree(msgId,text);
+// 暂停朗读
+function pauseReading(){
+  if(!readCurrentMsgId)return;
+  if(window.speechSynthesis)window.speechSynthesis.pause();
+  readPaused=true;
+  updateReadUI(readCurrentMsgId,'paused');
+}
+
+// 继续朗读
+function resumeReading(){
+  if(!readCurrentMsgId)return;
+  if(window.speechSynthesis)window.speechSynthesis.resume();
+  readPaused=false;
+  updateReadUI(readCurrentMsgId,'playing');
+  // 如果已经停止（非暂停状态），重新继续
+  if(!window.speechSynthesis.speaking&&!window.speechSynthesis.pending){
+    readNextSegment();
   }
 }
 
-async function ttsDoubaoSegment(config,text){
-  var resp=await fetch('https://openspeech.bytedance.com/api/v1/tts',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer;'+config.key,
-      'X-Api-App-Key':config.appid||config.key,
-      'X-Api-Resource-Id':'volc.megatts.tts'
-    },
-    body:JSON.stringify({
-      app:{appid:config.appid||'',token:config.key,cluster:config.cluster||'volcano_tts'},
-      user:{uid:'manga_agent'},
-      audio:{voice_type:config.voice||'zh_female_tianmei',encoding:'mp3',speed_ratio:1.0},
-      request:{reqid:Date.now()+''+Math.random(),text:text,operation:'query'}
-    })
-  });
-  if(!resp.ok)throw new Error('HTTP '+resp.status);
-  var data=await resp.json();
-  if(data.code!==3000)throw new Error(data.message||'TTS错误');
-  var binaryStr=atob(data.data);
-  var bytes=new Uint8Array(binaryStr.length);
-  for(var i=0;i<binaryStr.length;i++)bytes[i]=binaryStr.charCodeAt(i);
-  return new Blob([bytes],{type:'audio/mp3'});
-}
-
-function ttsSplitText(text,maxLen){
-  var segments=[];
-  var current='';
-  var sentences=text.split(/[。！？\n.!?]/);
-  for(var i=0;i<sentences.length;i++){
-    if((current+sentences[i]).length>maxLen){
-      if(current)segments.push(current);
-      current=sentences[i];
-    }else{
-      current+=sentences[i]+'。';
-    }
-  }
-  if(current)segments.push(current);
-  return segments;
-}
-
-function ttsPause(msgId){
-  var engineSel=document.getElementById('ttsEngine-'+msgId);
-  var engine=engineSel?engineSel.value:ttsEngine;
-  
-  if(engine==='doubao'){
-    var audioEl=document.getElementById('ttsAudio-'+msgId);
-    if(audioEl&&audioEl.pause){
-      audioEl.pause();
-      ttsPaused=true;
-      document.getElementById('ttsPause-'+msgId).style.display='none';
-      var r=document.getElementById('ttsResume-'+msgId);
-      if(r)r.style.display='flex';
-    }
-  }else{
-    if(window.speechSynthesis){
-      window.speechSynthesis.pause();
-      ttsPaused=true;
-      document.getElementById('ttsPause-'+msgId).style.display='none';
-      var r=document.getElementById('ttsResume-'+msgId);
-      if(r)r.style.display='flex';
-    }
-  }
-}
-
-function ttsResume(msgId){
-  var engineSel=document.getElementById('ttsEngine-'+msgId);
-  var engine=engineSel?engineSel.value:ttsEngine;
-  
-  if(engine==='doubao'){
-    var audioEl=document.getElementById('ttsAudio-'+msgId);
-    if(audioEl&&audioEl.play){
-      audioEl.play();
-      ttsPaused=false;
-      document.getElementById('ttsResume-'+msgId).style.display='none';
-      var p=document.getElementById('ttsPause-'+msgId);
-      if(p)p.style.display='flex';
-    }
-  }else{
-    if(window.speechSynthesis){
-      window.speechSynthesis.resume();
-      ttsPaused=false;
-      document.getElementById('ttsResume-'+msgId).style.display='none';
-      var p=document.getElementById('ttsPause-'+msgId);
-      if(p)p.style.display='flex';
-    }
-  }
-}
-
-function ttsStop(msgId){
+// 停止朗读
+function stopReading(){
   if(window.speechSynthesis)window.speechSynthesis.cancel();
-  var audioEl=document.getElementById('ttsAudio-'+msgId);
-  if(audioEl){
-    audioEl.pause();
-    audioEl.src='';
+  readSynth=null;
+  readCurrentMsgId=null;
+  readPaused=false;
+  readSegIndex=0;
+  readQueue=[];
+  // 清除所有朗读UI状态
+  document.querySelectorAll('.read-controls').forEach(function(el){el.remove();});
+}
+
+// 朗读完成
+function finishReading(){
+  var finishedMsgId=readCurrentMsgId;
+  readCurrentMsgId=null;
+  readPaused=false;
+  readSegIndex=0;
+  readQueue=[];
+  if(finishedMsgId){
+    var msgEl=document.querySelector('[data-msg-id="'+finishedMsgId+'"]');
+    if(msgEl){
+      var ctrl=msgEl.querySelector('.read-controls');
+      if(ctrl)ctrl.remove();
+    }
   }
-  ttsPaused=false;
-  if(msgId)ttsResetUI(msgId);
 }
 
-function ttsShowPlayingUI(msgId){
-  var playBtn=document.getElementById('ttsPlay-'+msgId);
-  if(playBtn)playBtn.style.display='none';
-  var pause=document.getElementById('ttsPause-'+msgId);
-  if(pause)pause.style.display='flex';
-  var stop=document.getElementById('ttsStop-'+msgId);
-  if(stop)stop.style.display='flex';
+// 更新朗读UI
+function updateReadUI(msgId,state){
+  var msgEl=document.querySelector('[data-msg-id="'+msgId+'"]');
+  if(!msgEl)return;
+  var ctrl=msgEl.querySelector('.read-controls');
+  if(!ctrl){
+    ctrl=document.createElement('div');
+    ctrl.className='read-controls';
+    msgEl.appendChild(ctrl);
+  }
+  if(state==='playing'){
+    ctrl.innerHTML='<button class="read-btn pause" onclick="event.stopPropagation();pauseReading()">⏸ 暂停</button>'+
+      '<button class="read-btn stop" onclick="event.stopPropagation();stopReading()">⬛ 停止</button>';
+  }else if(state==='paused'){
+    ctrl.innerHTML='<button class="read-btn resume" onclick="event.stopPropagation();resumeReading()">▶ 继续</button>'+
+      '<button class="read-btn stop" onclick="event.stopPropagation();stopReading()">⬛ 停止</button>';
+  }
 }
 
-function ttsResetUI(msgId){
-  var playBtn=document.getElementById('ttsPlay-'+msgId);
-  if(playBtn)playBtn.style.display='flex';
-  var pause=document.getElementById('ttsPause-'+msgId);
-  if(pause)pause.style.display='none';
-  var resume=document.getElementById('ttsResume-'+msgId);
-  if(resume)resume.style.display='none';
-  var stop=document.getElementById('ttsStop-'+msgId);
-  if(stop)stop.style.display='none';
-  ttsCurrentMsgId=null;
-  ttsPaused=false;
-}
+// 初始化自动朗读设置
+try{
+  var saved=localStorage.getItem('manga_autoread');
+  if(saved!==null)autoReadEnabled=saved==='1';
+}catch(e){}
 
 // 真实调用LLM API
 async function callLLM(messages,llmConfig){
