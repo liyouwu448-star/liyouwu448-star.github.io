@@ -34,6 +34,8 @@ const API_KEYS = {
   moonshot: process.env.MOONSHOT_API_KEY || '',
   // MiniMax
   minimax: process.env.MINIMAX_API_KEY || '',
+  // Stability AI
+  stability: process.env.STABILITY_API_KEY || '',
 };
 
 // ========== 各平台API配置 ==========
@@ -219,7 +221,75 @@ const IMAGE_PROVIDERS = {
   siliconflow: {
     endpoint: 'https://api.siliconflow.cn/v1/images/generations',
     keyName: 'siliconflow',
-    defaultModel: 'black-forest-labs/FLUX.1-schnell',
+    defaultModel: 'Kwai-Kolors/Kolors',
+    buildBody: (prompt, model, width, height, num) => {
+      const m = model || 'Kwai-Kolors/Kolors';
+      const body = {
+        model: m,
+        prompt: prompt,
+        image_size: `${width}x${height}`,
+        batch_size: num || 1,
+        num_inference_steps: 20,
+      };
+      if (m.indexOf('Kolors') >= 0) body.guidance_scale = 7.5;
+      if (m.indexOf('FLUX') >= 0) body.num_inference_steps = 4;
+      return body;
+    },
+    parseResult: (data) => {
+      if (data.images && data.images[0] && data.images[0].url) return data.images[0].url;
+      if (data.data && data.data[0] && data.data[0].url) return data.data[0].url;
+      return null;
+    }
+  },
+  volcengine: {
+    endpoint: 'https://ark.cn-beijing.volces.com/api/v3/images/generations',
+    keyName: 'doubao',
+    defaultModel: 'doubao-seedream-3-0-t2i-250515',
+    buildBody: (prompt, model, width, height) => {
+      return {
+        model: model || 'doubao-seedream-3-0-t2i-250515',
+        prompt: prompt,
+        size: `${width}x${height}`,
+        response_format: 'url',
+        watermark: false,
+      };
+    },
+    parseResult: (data) => {
+      if (data.data && data.data[0] && data.data[0].url) return data.data[0].url;
+      return null;
+    }
+  },
+  dashscope: {
+    endpoint: 'https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis',
+    keyName: 'qwen',
+    defaultModel: 'wanx2.1-t2i-turbo',
+    buildBody: (prompt, model) => {
+      return {
+        model: model || 'wanx2.1-t2i-turbo',
+        input: { prompt: prompt },
+        parameters: { size: '1024*1024', n: 1 },
+      };
+    },
+    parseResult: (data) => {
+      // Dashscope is async - return task info
+      if (data.output && data.output.task_id) {
+        return { asyncTask: data.output.task_id, requestId: data.request_id };
+      }
+      return null;
+    }
+  },
+  stability: {
+    endpoint: 'https://api.stability.ai/v2beta/stable-image/generate/sd3',
+    keyName: 'stability',
+    defaultModel: 'sd3.5-large',
+    buildBody: (prompt, model, width, height) => {
+      // Stability uses multipart form data
+      return null;
+    },
+    parseResult: (data) => {
+      if (data.image) return 'data:image/png;base64,' + data.image;
+      return null;
+    }
   },
 };
 
@@ -233,20 +303,59 @@ app.post('/api/image', async (req, res) => {
 
   const apiKey = API_KEYS[p.keyName];
   if (!apiKey) {
-    return res.status(400).json({ error: `平台 ${provider} 未配置API密钥` });
+    return res.status(400).json({ error: `平台 ${provider} 未配置API密钥，请在服务器环境变量中配置 ${p.keyName.toUpperCase()}_API_KEY` });
   }
 
   try {
     const url = new URL(p.endpoint);
     const client = url.protocol === 'https:' ? https : http;
 
-    const body = JSON.stringify({
-      model: model || p.defaultModel,
-      prompt: prompt,
-      image_size: `${width}x${height}`,
-      batch_size: num_images || 1,
-      num_inference_steps: 20,
-    });
+    const bodyData = p.buildBody(prompt, model, width, height, num_images);
+
+    // Stability uses multipart form data
+    if (provider === 'stability') {
+      const boundary = '----FormBoundary' + Math.random().toString(36).slice(2);
+      const formData = Buffer.from(
+        `--${boundary}\r\n` +
+        `Content-Disposition: form-data; name="prompt"\r\n\r\n${prompt}\r\n` +
+        `--${boundary}\r\n` +
+        `Content-Disposition: form-data; name="model"\r\n\r\n${model || 'sd3.5-large'}\r\n` +
+        `--${boundary}\r\n` +
+        `Content-Disposition: form-data; name="output_format"\r\n\r\npng\r\n` +
+        `--${boundary}--\r\n`
+      );
+
+      const options = {
+        hostname: url.hostname,
+        port: url.port || 443,
+        path: url.pathname,
+        method: 'POST',
+        headers: {
+          'Content-Type': `multipart/form-data; boundary=${boundary}`,
+          'Authorization': 'Bearer ' + apiKey,
+          'Accept': 'application/json',
+          'Content-Length': formData.length,
+        },
+      };
+
+      const proxyReq = client.request(options, (proxyRes) => {
+        let data = '';
+        proxyRes.on('data', (chunk) => { data += chunk; });
+        proxyRes.on('end', () => {
+          res.writeHead(proxyRes.statusCode, { 'Content-Type': 'application/json' });
+          res.send(data);
+        });
+      });
+      proxyReq.on('error', (err) => {
+        if (!res.headersSent) res.status(500).json({ error: '图像生成失败', message: err.message });
+      });
+      proxyReq.write(formData);
+      proxyReq.end();
+      return;
+    }
+
+    // Standard JSON API
+    const body = JSON.stringify(bodyData);
 
     const options = {
       hostname: url.hostname,
@@ -263,8 +372,24 @@ app.post('/api/image', async (req, res) => {
       let data = '';
       proxyRes.on('data', (chunk) => { data += chunk; });
       proxyRes.on('end', () => {
-        res.writeHead(proxyRes.statusCode, { 'Content-Type': 'application/json' });
-        res.send(data);
+        try {
+          const json = JSON.parse(data);
+          const imgUrl = p.parseResult(json);
+          if (imgUrl) {
+            if (typeof imgUrl === 'object' && imgUrl.asyncTask) {
+              // Async task (Dashscope)
+              res.json({ asyncTask: imgUrl.asyncTask, requestId: imgUrl.requestId, message: '任务已提交，请稍后查询结果' });
+            } else {
+              res.json({ images: [{ url: imgUrl }], data: [{ url: imgUrl }] });
+            }
+          } else {
+            res.writeHead(proxyRes.statusCode, { 'Content-Type': 'application/json' });
+            res.send(data);
+          }
+        } catch (e) {
+          res.writeHead(proxyRes.statusCode, { 'Content-Type': 'application/json' });
+          res.send(data);
+        }
       });
     });
 

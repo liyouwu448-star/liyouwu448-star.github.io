@@ -690,6 +690,63 @@ body.chat-active #view-chat{padding:0!important}
 .novel-progress-stats{font-size:12px;color:var(--text-dim);margin-bottom:14px}
 .novel-output{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:16px;max-height:500px;overflow-y:auto;font-size:13px;line-height:1.7;color:var(--text-mid)}
 
+/* ===== AI WORKER (数字员工) ===== */
+.aiw-voice-bar{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(99,102,241,.08));border:1px solid rgba(139,92,246,.3);border-radius:12px;padding:10px 14px;margin-bottom:16px;flex-wrap:wrap}
+.aiw-voice-icon{font-size:24px;cursor:pointer;transition:.2s}
+.aiw-voice-icon.listening{animation:aiwPulse 1s infinite}
+@keyframes aiwPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.aiw-voice-text{font-size:12px;color:var(--text-dim);flex:1;min-width:120px}
+.aiw-voice-btn{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.aiw-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);overflow-x:auto;padding-bottom:0}
+.aiw-tab{padding:10px 16px;font-size:13px;font-weight:500;color:var(--text-dim);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:.2s}
+.aiw-tab:hover{color:var(--text)}
+.aiw-tab.active{color:#a78bfa;border-bottom-color:#8b5cf6}
+.aiw-tab-content{display:none}
+.aiw-tab-content.active{display:block}
+.aiw-panel{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.aiw-panel-title{font-size:15px;font-weight:700;margin-bottom:16px}
+.aiw-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.aiw-form-group{display:flex;flex-direction:column;gap:6px}
+.aiw-form-group label{font-size:12px;color:var(--text-dim);font-weight:500}
+.aiw-primary-btn{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;border:none;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s}
+.aiw-primary-btn:hover{opacity:.9;transform:translateY(-1px)}
+.aiw-secondary-btn{background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer}
+.aiw-output-panel{background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:20px}
+.aiw-output-title{font-size:14px;font-weight:700;margin-bottom:14px}
+.aiw-video-card{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.aiw-video-card-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#a78bfa}
+.aiw-video-card-script{font-size:12px;color:var(--text-mid);line-height:1.6;white-space:pre-wrap}
+.aiw-video-card-meta{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.aiw-video-card-tag{font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(139,92,246,.15);color:#a78bfa}
+.aiw-platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.aiw-platform-card{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:.2s}
+.aiw-platform-card:hover{border-color:#8b5cf6}
+.aiw-platform-card.active{border-color:#8b5cf6;background:rgba(139,92,246,.08)}
+.aiw-platform-icon{font-size:28px;margin-bottom:6px}
+.aiw-platform-name{font-size:12px;font-weight:600;margin-bottom:2px}
+.aiw-platform-status{font-size:10px;color:var(--text-dim)}
+.aiw-stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.aiw-stat-card{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.aiw-stat-num{font-size:22px;font-weight:800;color:#a78bfa;margin-bottom:4px}
+.aiw-stat-label{font-size:11px;color:var(--text-dim)}
+.aiw-chat-area{display:flex;flex-direction:column;gap:12px}
+.aiw-chat-messages{max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.aiw-chat-msg{display:flex}
+.aiw-chat-msg.user{justify-content:flex-end}
+.aiw-chat-msg.bot{justify-content:flex-start}
+.aiw-chat-bubble{max-width:75%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5}
+.aiw-chat-msg.user .aiw-chat-bubble{background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;border-bottom-right-radius:4px}
+.aiw-chat-msg.bot .aiw-chat-bubble{background:var(--bg-3);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px}
+.aiw-chat-input-area{display:flex;gap:10px}
+.aiw-lead-card{background:var(--bg-3);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.aiw-lead-info{flex:1}
+.aiw-lead-name{font-size:13px;font-weight:600}
+.aiw-lead-desc{font-size:11px;color:var(--text-dim)}
+.aiw-lead-tag{font-size:10px;padding:2px 8px;border-radius:4px}
+.aiw-lead-tag.hot{background:rgba(239,68,68,.15);color:var(--red)}
+.aiw-lead-tag.warm{background:rgba(212,160,23,.15);color:var(--gold)}
+.aiw-lead-tag.cold{background:var(--bg-3);color:var(--text-dim)}
+
 /* ===== AUTO DISPATCH ===== */
 .dispatch-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:20px}
 .dispatch-col{background:var(--bg-2);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;min-height:400px}
@@ -789,6 +846,10 @@ body.chat-active #view-chat{padding:0!important}
     <button class="nav-item" data-view="marketing">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
       营销团队
+    </button>
+    <button class="nav-item" data-view="ai-worker">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 2v4M15 2v4M2 14h2M20 14h2M9 14h.01M15 14h.01M9 18h6"/></svg>
+      AI数字员工
     </button>
     <button class="nav-item" data-view="chat">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -1104,12 +1165,41 @@ body.chat-active #view-chat{padding:0!important}
         <div class="settings-row"><div class="settings-row-label">响度归一化</div><div class="settings-toggle on" onclick="this.classList.toggle('on')"></div></div>
       </div>
 
+      <!-- ===== API 代理配置 ===== -->
+      <div style="font-size:18px;font-weight:700;margin:24px 0 4px;display:flex;align-items:center;gap:8px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="width:20px;height:20px"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        API 代理服务器
+      </div>
+      <p style="color:var(--text-dim);font-size:12px;margin-bottom:16px;line-height:1.6">部署到静态托管（如GitHub Pages）时，浏览器直连AI接口会触发CORS跨域限制。配置代理服务器地址后，所有AI请求将通过代理转发，密钥安全存储在服务器端。</p>
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          代理服务器地址
+        </div>
+        <div style="padding:12px 16px">
+          <input id="proxyUrlInput" type="text" placeholder="如：https://your-server.vefaas.example.com（留空则尝试本地代理）" style="width:100%;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;user-select:text">
+          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+            <button onclick="saveProxyUrl()" style="background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer">💾 保存代理地址</button>
+            <button onclick="testProxyUrl()" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer">🔍 测试连接</button>
+            <button onclick="clearProxyUrl()" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer">清除</button>
+          </div>
+          <div id="proxyTestResult" style="margin-top:10px;font-size:12px"></div>
+          <div style="margin-top:10px;padding:10px;background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:8px;font-size:11px;color:var(--text-mid);line-height:1.6">
+            <strong style="color:var(--teal)">💡 说明：</strong><br>
+            • 本地运行：启动 server.js 后无需填写，自动检测<br>
+            • 线上部署：填写你的veFaaS/云服务器代理地址<br>
+            • 代理模式下密钥在服务器端管理，浏览器不暴露<br>
+            • 未配置代理时，使用浏览器直连（需API支持CORS）
+          </div>
+        </div>
+      </div>
+
       <!-- ===== API 密钥配置 ===== -->
       <div style="font-size:18px;font-weight:700;margin:24px 0 4px;display:flex;align-items:center;gap:8px">
         <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" style="width:20px;height:20px"><path d="M21 2l-2 2m-7.6 7.6a5 5 0 1 1-7 7 5 5 0 0 1 7-7zm0 0L15 8m0 0l3 3m-3-3l3-3"/></svg>
         API 密钥配置
       </div>
-      <p style="color:var(--text-dim);font-size:12px;margin-bottom:16px;line-height:1.6">填入各AI模型的API密钥后，平台将调用真实模型进行生产。密钥保存在浏览器本地，不会上传。未填写的引擎将使用演示模式。</p>
+      <p style="color:var(--text-dim);font-size:12px;margin-bottom:16px;line-height:1.6">填入各AI模型的API密钥后，平台将调用真实模型进行生产。密钥保存在浏览器本地，不会上传。配置了代理服务器时，密钥在服务器端管理，此处无需填写。</p>
 
       <!-- LLM 大模型 -->
       <div class="settings-section">
@@ -1623,6 +1713,231 @@ body.chat-active #view-chat{padding:0!important}
       </div>
     </div>
 
+    <!-- ===== AI数字员工·短视频运营 ===== -->
+    <div class="view" id="view-ai-worker">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap">
+        <div style="font-size:18px;font-weight:700">🤖 AI数字员工 · 短视频运营平台</div>
+        <span style="background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600">24小时自动运营</span>
+        <span style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text-dim);padding:3px 10px;border-radius:12px;font-size:11px">同城获客·矩阵分发·智能客服</span>
+      </div>
+      <p style="color:var(--text-dim);font-size:13px;margin-bottom:16px">AI全自动短视频运营系统：原创内容创作 → 多平台矩阵分发 → 同城LBS精准获客 → 24小时智能客服接待 → 数据自动复盘。一套系统替代剪辑、运营、客服、数据分析多个人工岗位。</p>
+
+      <!-- 语音控制条 -->
+      <div class="aiw-voice-bar" id="aiwVoiceBar">
+        <div class="aiw-voice-icon" id="aiwVoiceIcon">🎙️</div>
+        <div class="aiw-voice-text" id="aiwVoiceText">点击麦克风或输入指令，语音控制AI员工工作</div>
+        <button class="aiw-voice-btn" onclick="aiwToggleVoice()">开始语音</button>
+        <input type="text" id="aiwVoiceInput" placeholder="或输入文字指令..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:8px 12px;border-radius:8px;font-size:13px;min-width:150px" onkeypress="if(event.key==='Enter')aiwExecuteCommand(this.value)">
+        <button class="aiw-voice-btn" onclick="aiwExecuteCommand(document.getElementById('aiwVoiceInput').value)">执行</button>
+      </div>
+
+      <!-- Tab导航 -->
+      <div class="aiw-tabs">
+        <button class="aiw-tab active" onclick="aiwSwitchTab('create')">🎬 短视频创作</button>
+        <button class="aiw-tab" onclick="aiwSwitchTab('distribute')">📤 矩阵分发</button>
+        <button class="aiw-tab" onclick="aiwSwitchTab('local')">📍 同城获客</button>
+        <button class="aiw-tab" onclick="aiwSwitchTab('service')">💬 智能客服</button>
+        <button class="aiw-tab" onclick="aiwSwitchTab('dashboard')">📊 数据复盘</button>
+      </div>
+
+      <!-- Tab1: 短视频创作 -->
+      <div class="aiw-tab-content active" id="aiwTab-create">
+        <div class="aiw-panel">
+          <div class="aiw-panel-title">✍️ AI短视频创作工作台</div>
+          <div class="aiw-form-grid">
+            <div class="aiw-form-group">
+              <label>行业类型</label>
+              <select id="aiwIndustry" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="restaurant">餐饮美食</option>
+                <option value="beauty">美容美发</option>
+                <option value="wellness">足浴养生</option>
+                <option value="carwash">汽车洗护</option>
+                <option value="fitness">健身瑜伽</option>
+                <option value="decor">装修建材</option>
+                <option value="photo">婚纱摄影</option>
+                <option value="housekeeping">本地家政</option>
+                <option value="education">教育培训</option>
+                <option value="custom">自定义</option>
+              </select>
+            </div>
+            <div class="aiw-form-group">
+              <label>视频风格</label>
+              <select id="aiwVideoStyle" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="探店">探店种草</option>
+                <option value="知识">知识科普</option>
+                <option value="剧情">剧情短片</option>
+                <option value="混剪">混剪节奏</option>
+                <option value="vlog">日常Vlog</option>
+              </select>
+            </div>
+            <div class="aiw-form-group">
+              <label>视频时长</label>
+              <select id="aiwVideoDuration" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="15">15秒（短平快）</option>
+                <option value="30" selected>30秒（标准）</option>
+                <option value="60">60秒（深度）</option>
+                <option value="90">90秒（长视频）</option>
+              </select>
+            </div>
+            <div class="aiw-form-group">
+              <label>批量数量</label>
+              <select id="aiwBatchCount" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="1">1条</option>
+                <option value="3" selected>3条</option>
+                <option value="5">5条</option>
+                <option value="10">10条</option>
+              </select>
+            </div>
+          </div>
+          <div class="aiw-form-group" style="margin-top:12px">
+            <label>门店/产品信息（描述你的门店特色、主打产品、地址等）</label>
+            <textarea id="aiwStoreInfo" rows="3" placeholder="例：杭州西湖区某火锅店，主打牛油锅底+鲜切牛肉，人均80元，地址：西湖区文三路xxx号..." style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%;resize:vertical;font-family:inherit"></textarea>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <button class="aiw-primary-btn" onclick="aiwCreateVideos()" style="flex:1;min-width:200px">🎬 一键批量创作短视频</button>
+            <button class="aiw-secondary-btn" onclick="aiwGenerateScript()">📝 仅生成文案</button>
+            <button class="aiw-secondary-btn" onclick="aiwGenerateImage()">🖼️ 生成配图</button>
+          </div>
+        </div>
+        <div class="aiw-output-panel" id="aiwCreateOutput" style="display:none">
+          <div class="aiw-output-title">📦 创作结果</div>
+          <div id="aiwCreateResults"></div>
+        </div>
+      </div>
+
+      <!-- Tab2: 矩阵分发 -->
+      <div class="aiw-tab-content" id="aiwTab-distribute">
+        <div class="aiw-panel">
+          <div class="aiw-panel-title">📤 多平台矩阵分发管理</div>
+          <p style="color:var(--text-dim);font-size:12px;margin-bottom:16px">管理抖音、小红书、视频号、B站、快手等多平台账号，定时批量发布，自动积累账号权重</p>
+          <div class="aiw-platform-grid" id="aiwPlatformGrid"></div>
+          <div style="display:flex;gap:12px;margin-top:16px;flex-wrap:wrap">
+            <button class="aiw-primary-btn" onclick="aiwPublishAll()" style="flex:1;min-width:200px">🚀 一键全平台发布</button>
+            <button class="aiw-secondary-btn" onclick="aiwAddPlatform()">➕ 添加平台账号</button>
+            <button class="aiw-secondary-btn" onclick="aiwSetSchedule()">⏰ 定时发布设置</button>
+          </div>
+        </div>
+        <div class="aiw-panel" style="margin-top:16px">
+          <div class="aiw-panel-title">📋 发布队列</div>
+          <div id="aiwPublishQueue"></div>
+        </div>
+      </div>
+
+      <!-- Tab3: 同城获客 -->
+      <div class="aiw-tab-content" id="aiwTab-local">
+        <div class="aiw-panel">
+          <div class="aiw-panel-title">📍 同城LBS精准获客</div>
+          <div class="aiw-form-grid">
+            <div class="aiw-form-group">
+              <label>门店城市</label>
+              <input id="aiwCity" value="杭州" placeholder="如：杭州" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+            </div>
+            <div class="aiw-form-group">
+              <label>辐射范围</label>
+              <select id="aiwRadius" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="1">1公里</option>
+                <option value="3" selected>3公里</option>
+                <option value="5">5公里</option>
+                <option value="10">10公里</option>
+              </select>
+            </div>
+            <div class="aiw-form-group">
+              <label>目标人群</label>
+              <select id="aiwTargetAudience" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="探店">同城探店人群</option>
+                <option value="刚需">同城刚需用户</option>
+                <option value="休闲">同城休闲娱乐</option>
+                <option value="all">全部人群</option>
+              </select>
+            </div>
+            <div class="aiw-form-group">
+              <label>触达方式</label>
+              <select id="aiwReachMode" style="background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px;width:100%">
+                <option value="like">点赞触达</option>
+                <option value="follow">关注触达</option>
+                <option value="comment">评论互动</option>
+                <option value="message">私信温和触达</option>
+                <option value="all" selected>全自动混合触达</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <button class="aiw-primary-btn" onclick="aiwStartLocalReach()" style="flex:1;min-width:200px">📍 启动同城获客</button>
+            <button class="aiw-secondary-btn" onclick="aiwGenGeoKeywords()">🔑 生成GEO关键词</button>
+          </div>
+        </div>
+        <div class="aiw-panel" style="margin-top:16px">
+          <div class="aiw-panel-title">🎯 获客进度</div>
+          <div class="aiw-stats-row" id="aiwLocalStats">
+            <div class="aiw-stat-card"><div class="aiw-stat-num" id="aiwReachCount">0</div><div class="aiw-stat-label">已触达用户</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num" id="aiwLeadCount">0</div><div class="aiw-stat-label">意向线索</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num" id="aiwFollowCount">0</div><div class="aiw-stat-label">新增关注</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num" id="aiwConvertCount">0</div><div class="aiw-stat-label">到店转化</div></div>
+          </div>
+          <div id="aiwLocalLog" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- Tab4: 智能客服 -->
+      <div class="aiw-tab-content" id="aiwTab-service">
+        <div class="aiw-panel">
+          <div class="aiw-panel-title">💬 24小时智能客服</div>
+          <p style="color:var(--text-dim);font-size:12px;margin-bottom:16px">AI自动回复私信咨询、评论互动、意向客户导流企业微信，响应时长<1分钟</p>
+          <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+            <button class="aiw-primary-btn" onclick="aiwToggleService()" id="aiwServiceBtn" style="flex:1;min-width:180px">▶️ 启动智能客服</button>
+            <button class="aiw-secondary-btn" onclick="aiwEditScript()">📝 话术库设置</button>
+            <button class="aiw-secondary-btn" onclick="aiwExportLeads()">📥 导出线索</button>
+          </div>
+          <div class="aiw-chat-area">
+            <div class="aiw-chat-messages" id="aiwChatMessages">
+              <div class="aiw-chat-msg user">
+                <div class="aiw-chat-bubble">你好，你们店在哪里？有什么特色菜？</div>
+              </div>
+              <div class="aiw-chat-msg bot">
+                <div class="aiw-chat-bubble">您好！我们店在西湖区文三路xxx号，主打牛油锅底+鲜切牛肉，人均80元。现在有团购套餐更优惠哦，需要我发您链接吗？😊</div>
+              </div>
+            </div>
+            <div class="aiw-chat-input-area">
+              <input type="text" id="aiwChatInput" placeholder="模拟客户提问，测试AI回复..." style="flex:1;background:var(--bg-3);border:1px solid var(--border-l);color:var(--text);padding:10px 12px;border-radius:8px;font-size:13px" onkeypress="if(event.key==='Enter')aiwTestReply()">
+              <button class="aiw-primary-btn" style="flex:none;padding:10px 20px" onclick="aiwTestReply()">发送</button>
+            </div>
+          </div>
+        </div>
+        <div class="aiw-panel" style="margin-top:16px">
+          <div class="aiw-panel-title">📋 线索管理</div>
+          <div id="aiwLeadsList"></div>
+        </div>
+      </div>
+
+      <!-- Tab5: 数据复盘 -->
+      <div class="aiw-tab-content" id="aiwTab-dashboard">
+        <div class="aiw-panel">
+          <div class="aiw-panel-title">📊 全域数据自动复盘</div>
+          <div class="aiw-stats-row">
+            <div class="aiw-stat-card"><div class="aiw-stat-num">1,286</div><div class="aiw-stat-label">总曝光量</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num">356</div><div class="aiw-stat-label">总播放量</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num">89</div><div class="aiw-stat-label">新增粉丝</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num">23</div><div class="aiw-stat-label">到店线索</div></div>
+          </div>
+          <div class="aiw-stats-row" style="margin-top:12px">
+            <div class="aiw-stat-card"><div class="aiw-stat-num">¥2,860</div><div class="aiw-stat-label">团购GMV</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num">45%</div><div class="aiw-stat-label">核销率</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num">2.8%</div><div class="aiw-stat-label">转化率</div></div>
+            <div class="aiw-stat-card"><div class="aiw-stat-num">98%</div><div class="aiw-stat-label">客服响应率</div></div>
+          </div>
+        </div>
+        <div class="aiw-panel" style="margin-top:16px">
+          <div class="aiw-panel-title">📈 各平台数据明细</div>
+          <div id="aiwPlatformData"></div>
+        </div>
+        <div class="aiw-panel" style="margin-top:16px">
+          <div class="aiw-panel-title">🤖 AI复盘报告</div>
+          <button class="aiw-primary-btn" onclick="aiwGenReport()" style="margin-bottom:14px">生成AI复盘报告</button>
+          <div id="aiwReportArea"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ===== 长篇连载生产线 ===== -->
     <div class="view" id="view-serial">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap">
@@ -1828,6 +2143,10 @@ body.chat-active #view-chat{padding:0!important}
     <button class="more-menu-item" data-view="marketing">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
       营销团队
+    </button>
+    <button class="more-menu-item" data-view="ai-worker">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M9 2v4M15 2v4M2 14h2M20 14h2M9 14h.01M15 14h.01M9 18h6"/></svg>
+      AI数字员工
     </button>
     <button class="more-menu-item" data-view="replicate">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10 8 16 11 10 14 10 8"/><path d="M8 21h8"/></svg>
@@ -2106,10 +2425,17 @@ function switchView(view){
   document.querySelectorAll('.more-menu-item').forEach(n=>n.classList.toggle('active',n.dataset.view===view));
   // 聊天视图：隐藏底部导航
   document.body.classList.toggle('chat-active',view==='chat');
-  const titles={workspace:'项目工作台',pipeline:'生产管线',assets:'资产库',newproject:'新建项目','workflow-novel':'小说创作工作流','workflow-manga':'2D国漫工作流','workflow-3d':'SSS级3D国漫','workflow-live':'AI真人短剧',serial:'长篇连载·批量生产','character-lib':'角色资产库',autodispatch:'Auto派单中心',marketing:'营销团队',chat:'AI 聊天助手',replicate:'视频复刻',inspire:'灵感库',settings:'引擎设置'};
+  const titles={workspace:'项目工作台',pipeline:'生产管线',assets:'资产库',newproject:'新建项目','workflow-novel':'小说创作工作流','workflow-manga':'2D国漫工作流','workflow-3d':'SSS级3D国漫','workflow-live':'AI真人短剧',serial:'长篇连载·批量生产','character-lib':'角色资产库',autodispatch:'Auto派单中心',marketing:'营销团队','ai-worker':'AI数字员工·短视频运营',chat:'AI 聊天助手',replicate:'视频复刻',inspire:'灵感库',settings:'引擎设置'};
   document.getElementById('headerTitle').textContent=titles[view]||'';
   document.querySelector('.main-content').scrollTop=0;
   closeMoreMenu();
+  // 设置页：填充代理地址
+  if(view==='settings'){
+    var proxyInput=document.getElementById('proxyUrlInput');
+    if(proxyInput){
+      try{proxyInput.value=localStorage.getItem('manga_proxy_url')||'';}catch(e){}
+    }
+  }
 }
 document.querySelectorAll('[data-view]').forEach(el=>{
   el.addEventListener('click',()=>switchView(el.dataset.view));
@@ -2677,6 +3003,31 @@ function novelUpdateProgress(fillEl,statsEl,percent,label){
 
 // 单次调用LLM（非流式，用于小说创作）
 async function callLLMOnce(messages,llmConfig,temperature){
+  // 代理模式优先
+  if(proxyAvailable){
+    var model=llmConfig.model||(LLM_PROVIDERS[llmConfig.provider]?LLM_PROVIDERS[llmConfig.provider].defaultModel:'');
+    var resp=await fetch(proxyApi('/api/chat'),{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        provider:llmConfig.provider,
+        model:model,
+        messages:messages,
+        stream:false,
+        temperature:temperature||0.7,
+        max_tokens:8192
+      })
+    });
+    if(!resp.ok){
+      var t=await resp.text();
+      var err={};try{err=JSON.parse(t);}catch(e){}
+      throw new Error(err.error||err.message||('HTTP '+resp.status+': '+t.substring(0,300)));
+    }
+    var data=await resp.json();
+    return data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:
+           (data.content?data.content.map(function(c){return c.text||'';}).join(''):'');
+  }
+
   var config=LLM_PROVIDERS[llmConfig.provider];
   if(!config)throw new Error('未知服务商：'+llmConfig.provider);
   var model=llmConfig.model||config.defaultModel;
@@ -2722,6 +3073,374 @@ async function callLLMOnce(messages,llmConfig,temperature){
     return data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:'';
   }
 }
+
+// ===== AI数字员工·短视频运营 =====
+var aiwPlatforms=[
+  {id:'douyin',name:'抖音',icon:'🎵',connected:true,published:12,followers:1280},
+  {id:'xhs',name:'小红书',icon:'📕',connected:true,published:8,followers:560},
+  {id:'wxvideo',name:'视频号',icon:'📹',connected:true,published:6,followers:320},
+  {id:'bili',name:'B站',icon:'📺',connected:false,published:0,followers:0},
+  {id:'kuaishou',name:'快手',icon:'⚡',connected:false,published:0,followers:0},
+  {id:'weibo',name:'微博',icon:'🌐',connected:false,published:0,followers:0},
+];
+var aiwLeads=[
+  {name:'王女士',phone:'138****6688',source:'抖音私信',level:'hot',time:'2分钟前',desc:'询问团购套餐和营业时间'},
+  {name:'李先生',phone:'139****2233',source:'小红书评论',level:'warm',time:'15分钟前',desc:'问是否需要预约'},
+  {name:'张小姐',phone:'137****5599',source:'视频号留言',level:'hot',time:'1小时前',desc:'想了解会员卡'},
+  {name:'陈先生',phone:'136****8877',source:'抖音评论',level:'cold',time:'2小时前',desc:'问地址在哪'},
+];
+var aiwServiceActive=false;
+var aiwVoiceListening=false;
+var aiwRecognition=null;
+
+function aiwSwitchTab(tab){
+  document.querySelectorAll('.aiw-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.aiw-tab-content').forEach(function(c){c.classList.remove('active');});
+  event.target.classList.add('active');
+  var el=document.getElementById('aiwTab-'+tab);
+  if(el)el.classList.add('active');
+  if(tab==='distribute')aiwRenderPlatforms();
+  if(tab==='service')aiwRenderLeads();
+  if(tab==='dashboard')aiwRenderPlatformData();
+}
+
+function aiwRenderPlatforms(){
+  var grid=document.getElementById('aiwPlatformGrid');
+  if(!grid)return;
+  grid.innerHTML=aiwPlatforms.map(function(p){
+    return '<div class="aiw-platform-card'+(p.connected?' active':'')+'" onclick="aiwTogglePlatform(\''+p.id+'\')">'+
+      '<div class="aiw-platform-icon">'+p.icon+'</div>'+
+      '<div class="aiw-platform-name">'+p.name+'</div>'+
+      '<div class="aiw-platform-status">'+(p.connected?'✅ 已连接 · '+p.published+'条发布':'未连接 · 点击绑定')+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+function aiwTogglePlatform(id){
+  var p=aiwPlatforms.find(function(x){return x.id===id;});
+  if(p){
+    p.connected=!p.connected;
+    aiwRenderPlatforms();
+  }
+}
+
+function aiwRenderLeads(){
+  var el=document.getElementById('aiwLeadsList');
+  if(!el)return;
+  el.innerHTML=aiwLeads.map(function(l){
+    return '<div class="aiw-lead-card">'+
+      '<div class="aiw-lead-info"><div class="aiw-lead-name">'+l.name+' · '+l.phone+'</div>'+
+      '<div class="aiw-lead-desc">'+l.source+' · '+l.time+' · '+l.desc+'</div></div>'+
+      '<span class="aiw-lead-tag '+l.level+'">'+(l.level==='hot'?'🔥 热线索':l.level==='warm'?'💛 暖线索':'❄️ 冷线索')+'</span>'+
+      '</div>';
+  }).join('');
+}
+
+function aiwRenderPlatformData(){
+  var el=document.getElementById('aiwPlatformData');
+  if(!el)return;
+  var data=[
+    {name:'抖音',icon:'🎵',views:8650,likes:423,comments:89,shares:34},
+    {name:'小红书',icon:'📕',views:3280,likes:256,comments:45,shares:18},
+    {name:'视频号',icon:'📹',views:1860,likes:98,comments:23,shares:12},
+  ];
+  el.innerHTML='<table style="width:100%;font-size:13px;border-collapse:collapse">'+
+    '<tr style="color:var(--text-dim);font-size:11px"><td style="padding:8px">平台</td><td>播放</td><td>点赞</td><td>评论</td><td>分享</td></tr>'+
+    data.map(function(d){
+      return '<tr style="border-top:1px solid var(--border)"><td style="padding:8px">'+d.icon+' '+d.name+'</td><td>'+d.views+'</td><td>'+d.likes+'</td><td>'+d.comments+'</td><td>'+d.shares+'</td></tr>';
+    }).join('')+'</table>';
+}
+
+async function aiwCreateVideos(){
+  var industry=document.getElementById('aiwIndustry')?.value||'restaurant';
+  var style=document.getElementById('aiwVideoStyle')?.value||'探店';
+  var duration=document.getElementById('aiwVideoDuration')?.value||'30';
+  var batch=parseInt(document.getElementById('aiwBatchCount')?.value||'3');
+  var storeInfo=document.getElementById('aiwStoreInfo')?.value||'';
+  if(!storeInfo.trim()){alert('请先填写门店/产品信息');return;}
+
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){alert('请先配置AI密钥');return;}
+
+  var industryMap={restaurant:'餐饮美食',beauty:'美容美发',wellness:'足浴养生',carwash:'汽车洗护',fitness:'健身瑜伽',decor:'装修建材',photo:'婚纱摄影',housekeeping:'本地家政',education:'教育培训',custom:'自定义'};
+  var output=document.getElementById('aiwCreateOutput');
+  var results=document.getElementById('aiwCreateResults');
+  if(output)output.style.display='block';
+  if(results)results.innerHTML='<div style="color:var(--text-dim);padding:20px">🎬 AI正在批量创作短视频脚本...</div>';
+
+  try{
+    var prompt='你是一个专业的短视频运营专家。请为以下门店创作'+batch+'条'+style+'风格短视频脚本。\n\n行业：'+(industryMap[industry]||industry)+'\n门店信息：'+storeInfo+'\n视频时长：'+duration+'秒\n\n请为每条视频输出：\n【视频X】\n标题：（吸引人的标题，带emoji）\n文案：（'+duration+'秒口播文案，要有钩子开头、核心内容、引导互动结尾）\n画面建议：（分镜描述）\n话题标签：#xxx #xxx #xxx（5-8个，含同城标签）\n\n要求：\n1. 每条角度不同（探店/产品/故事/知识/活动）\n2. 口语化，适合短视频节奏\n3. 带同城GEO标签';
+    var result=await callLLMOnce([{role:'user',content:prompt}],llmConfig,0.9);
+
+    if(results){
+      var cards=result.split(/【视频\d+】/).filter(function(s){return s.trim();});
+      if(cards.length===0){
+        results.innerHTML='<div class="aiw-video-card"><div class="aiw-video-card-script">'+result.replace(/\n/g,'<br>')+'</div></div>';
+      }else{
+        results.innerHTML=cards.map(function(c,idx){
+          return '<div class="aiw-video-card">'+
+            '<div class="aiw-video-card-title">🎬 视频'+(idx+1)+'</div>'+
+            '<div class="aiw-video-card-script">'+c.trim().replace(/\n/g,'<br>')+'</div>'+
+            '<div class="aiw-video-card-meta"><span class="aiw-video-card-tag">'+style+'</span><span class="aiw-video-card-tag">'+duration+'秒</span></div>'+
+            '</div>';
+        }).join('');
+      }
+    }
+  }catch(e){
+    if(results)results.innerHTML='<div style="color:var(--red);padding:20px">❌ 创作失败：'+(e.message||e)+'</div>';
+  }
+}
+
+async function aiwGenerateScript(){
+  var storeInfo=document.getElementById('aiwStoreInfo')?.value||'';
+  if(!storeInfo.trim()){alert('请先填写门店信息');return;}
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){alert('请先配置AI密钥');return;}
+  var output=document.getElementById('aiwCreateOutput');
+  var results=document.getElementById('aiwCreateResults');
+  if(output)output.style.display='block';
+  if(results)results.innerHTML='<div style="color:var(--text-dim);padding:20px">📝 生成中...</div>';
+  try{
+    var prompt='请为以下门店生成一条探店短视频口播文案，30秒以内，口语化，有吸引力：\n'+storeInfo;
+    var result=await callLLMOnce([{role:'user',content:prompt}],llmConfig,0.9);
+    if(results)results.innerHTML='<div class="aiw-video-card"><div class="aiw-video-card-title">📝 短视频文案</div><div class="aiw-video-card-script">'+result.replace(/\n/g,'<br>')+'</div></div>';
+  }catch(e){
+    if(results)results.innerHTML='❌ '+e.message;
+  }
+}
+
+async function aiwGenerateImage(){
+  var storeInfo=document.getElementById('aiwStoreInfo')?.value||'';
+  if(!storeInfo.trim()){alert('请先填写门店信息');return;}
+  var output=document.getElementById('aiwCreateOutput');
+  var results=document.getElementById('aiwCreateResults');
+  if(output)output.style.display='block';
+  if(results)results.innerHTML='<div style="color:var(--text-dim);padding:20px">🖼️ AI正在生成探店配图...</div>';
+  try{
+    var prompt='美食探店短视频配图，精美的火锅店场景，热气腾腾的牛油锅底，新鲜食材摆盘，温暖灯光，专业美食摄影风格，4K高清';
+    var imgUrl=await generateImage(prompt);
+    if(results)results.innerHTML='<div class="aiw-video-card"><div class="aiw-video-card-title">🖼️ AI生成配图</div><img src="'+imgUrl+'" style="width:100%;border-radius:8px;margin-top:8px" /></div>';
+  }catch(e){
+    if(results)results.innerHTML='<div style="color:var(--red);padding:20px">❌ 图片生成失败：'+(e.message||e)+'<br><br>💡 请确保已在🔑设置中配置AI绘图密钥（硅基流动）</div>';
+  }
+}
+
+function aiwPublishAll(){
+  var connected=aiwPlatforms.filter(function(p){return p.connected;});
+  if(connected.length===0){alert('请先绑定至少一个平台账号');return;}
+  var queue=document.getElementById('aiwPublishQueue');
+  if(!queue)return;
+  queue.innerHTML=connected.map(function(p){
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-3);border-radius:8px;margin-bottom:8px">'+
+      '<span style="font-size:20px">'+p.icon+'</span>'+
+      '<div style="flex:1"><div style="font-size:13px;font-weight:600">'+p.name+'</div><div style="font-size:11px;color:var(--text-dim)">已加入发布队列</div></div>'+
+      '<span style="color:var(--green);font-size:12px">✅ 排队中</span>'+
+      '</div>';
+  }).join('');
+  alert('已将内容加入'+connected.length+'个平台的发布队列，将按定时策略自动发布。');
+}
+
+function aiwAddPlatform(){alert('请在「矩阵分发」页面点击未连接的平台卡片进行账号绑定。');}
+function aiwSetSchedule(){
+  var time=prompt('设置每日自动发布时间（24小时制，如09:00）：','09:00');
+  if(time)alert('已设置每日 '+time+' 自动发布，系统将按时自动推送内容到各平台。');
+}
+
+var aiwLocalTimer=null;
+function aiwStartLocalReach(){
+  var city=document.getElementById('aiwCity')?.value||'杭州';
+  var radius=document.getElementById('aiwRadius')?.value||'3';
+  var audience=document.getElementById('aiwTargetAudience')?.value||'all';
+  var mode=document.getElementById('aiwReachMode')?.value||'all';
+  var log=document.getElementById('aiwLocalLog');
+  if(!log)return;
+  log.innerHTML='';
+  var reach=0,leads=0,follows=0,converts=0;
+  var actions=['点赞了同城用户','关注了潜在客户','评论了探店视频','私信触达意向用户'];
+  if(aiwLocalTimer)clearInterval(aiwLocalTimer);
+  var count=0;
+  aiwLocalTimer=setInterval(function(){
+    count++;
+    var action=actions[Math.floor(Math.random()*actions.length)];
+    reach+=Math.floor(Math.random()*5)+1;
+    if(Math.random()>0.6)leads+=1;
+    if(Math.random()>0.7)follows+=1;
+    if(Math.random()>0.9)converts+=1;
+    document.getElementById('aiwReachCount').textContent=reach;
+    document.getElementById('aiwLeadCount').textContent=leads;
+    document.getElementById('aiwFollowCount').textContent=follows;
+    document.getElementById('aiwConvertCount').textContent=converts;
+    log.innerHTML='<div style="font-size:12px;color:var(--text-mid);padding:6px 0;border-bottom:1px solid var(--border)">['+new Date().toLocaleTimeString()+'] '+city+' '+radius+'km范围内 · '+action+'</div>'+log.innerHTML;
+    if(count>=20){
+      clearInterval(aiwLocalTimer);
+      aiwLocalTimer=null;
+      log.innerHTML='<div style="color:var(--green);padding:8px 0;font-weight:600">✅ 本轮获客完成！触达'+reach+'人，获取线索'+leads+'条</div>'+log.innerHTML;
+    }
+  },1500);
+}
+
+async function aiwGenGeoKeywords(){
+  var city=document.getElementById('aiwCity')?.value||'杭州';
+  var industry=document.getElementById('aiwIndustry')?.value||'restaurant';
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){alert('请先配置AI密钥');return;}
+  var log=document.getElementById('aiwLocalLog');
+  if(log)log.innerHTML='<div style="color:var(--text-dim);padding:10px">🔑 生成GEO关键词中...</div>';
+  try{
+    var industryMap={restaurant:'餐饮美食',beauty:'美容美发',wellness:'足浴养生',carwash:'汽车洗护',fitness:'健身瑜伽',decor:'装修建材'};
+    var prompt='请为'+city+'的'+(industryMap[industry]||industry)+'门店生成30个同城GEO关键词，用于短视频SEO优化。包括：\n1. 同城+行业词（如"杭州火锅"）\n2. 同城+探店词（如"杭州探店"）\n3. 同城+区域词（如"西湖区火锅"）\n4. 长尾词（如"杭州哪家火锅好吃"）\n\n请直接输出关键词列表，每行一个。';
+    var result=await callLLMOnce([{role:'user',content:prompt}],llmConfig,0.7);
+    if(log)log.innerHTML='<div style="font-size:12px;white-space:pre-wrap;line-height:1.8">'+result+'</div>';
+  }catch(e){
+    if(log)log.innerHTML='❌ '+e.message;
+  }
+}
+
+function aiwToggleService(){
+  aiwServiceActive=!aiwServiceActive;
+  var btn=document.getElementById('aiwServiceBtn');
+  if(btn)btn.textContent=aiwServiceActive?'⏸️ 暂停智能客服':'▶️ 启动智能客服';
+  alert(aiwServiceActive?'智能客服已启动，将自动回复所有平台私信和评论，响应时长<1分钟':'智能客服已暂停。');
+}
+
+async function aiwTestReply(){
+  var input=document.getElementById('aiwChatInput');
+  var msgs=document.getElementById('aiwChatMessages');
+  if(!input||!msgs)return;
+  var text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  // 添加用户消息
+  var userDiv=document.createElement('div');
+  userDiv.className='aiw-chat-msg user';
+  userDiv.innerHTML='<div class="aiw-chat-bubble">'+text+'</div>';
+  msgs.appendChild(userDiv);
+  msgs.scrollTop=msgs.scrollHeight;
+  // AI回复
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){
+    var botDiv=document.createElement('div');
+    botDiv.className='aiw-chat-msg bot';
+    botDiv.innerHTML='<div class="aiw-chat-bubble">请先配置AI密钥以启用智能客服回复。</div>';
+    msgs.appendChild(botDiv);
+    return;
+  }
+  var storeInfo=document.getElementById('aiwStoreInfo')?.value||'一家本地门店';
+  try{
+    var prompt='你是一个友好的门店客服AI。门店信息：'+storeInfo+'\n\n客户问题：'+text+'\n\n请用亲切自然的语气回复，简洁明了，可以适当用emoji。如果客户问到地址、价格、营业时间等具体信息，基于门店信息回答。如果有团购优惠可以主动推荐。';
+    var reply=await callLLMOnce([{role:'user',content:prompt}],llmConfig,0.8);
+    var botDiv2=document.createElement('div');
+    botDiv2.className='aiw-chat-msg bot';
+    botDiv2.innerHTML='<div class="aiw-chat-bubble">'+reply.replace(/\n/g,'<br>')+'</div>';
+    msgs.appendChild(botDiv2);
+    msgs.scrollTop=msgs.scrollHeight;
+  }catch(e){
+    var errDiv=document.createElement('div');
+    errDiv.className='aiw-chat-msg bot';
+    errDiv.innerHTML='<div class="aiw-chat-bubble">抱歉，回复出了点问题：'+e.message+'</div>';
+    msgs.appendChild(errDiv);
+  }
+}
+
+function aiwEditScript(){alert('话术库功能：可在此设置自动回复模板、关键词触发规则、转人工条件等。');}
+function aiwExportLeads(){
+  if(aiwLeads.length===0){alert('暂无线索');return;}
+  var csv='姓名,电话,来源,级别,时间,描述\n';
+  aiwLeads.forEach(function(l){
+    csv+=[l.name,l.phone,l.source,l.level,l.time,l.desc].join(',')+'\n';
+  });
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='客户线索.csv';a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function aiwGenReport(){
+  var area=document.getElementById('aiwReportArea');
+  if(!area)return;
+  area.innerHTML='<div style="color:var(--text-dim);padding:20px">🤖 AI正在生成复盘报告...</div>';
+  var llmConfig=await getActiveLLMConfig();
+  if(!llmConfig){area.innerHTML='请先配置AI密钥';return;}
+  try{
+    var prompt='请基于以下数据生成一份短视频运营周复盘报告：\n\n总曝光1286，播放356，新增粉丝89，到店线索23，团购GMV ¥2860，核销率45%，转化率2.8%，客服响应率98%。\n\n抖音：播放8650，点赞423\n小红书：播放3280，点赞256\n视频号：播放1860，点赞98\n\n请输出：\n1. 数据概览\n2. 各平台表现分析\n3. 亮点与问题\n4. 下周优化建议\n5. 预计目标';
+    var result=await callLLMOnce([{role:'user',content:prompt}],llmConfig,0.7);
+    area.innerHTML='<div style="font-size:13px;line-height:1.8;white-space:pre-wrap">'+result+'</div>';
+  }catch(e){
+    area.innerHTML='❌ '+e.message;
+  }
+}
+
+// 语音控制
+function aiwToggleVoice(){
+  if(aiwVoiceListening){
+    if(aiwRecognition)aiwRecognition.stop();
+    return;
+  }
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('当前浏览器不支持语音识别，请使用Chrome浏览器');return;}
+  aiwRecognition=new SR();
+  aiwRecognition.lang='zh-CN';
+  aiwRecognition.continuous=false;
+  aiwRecognition.interimResults=true;
+  var icon=document.getElementById('aiwVoiceIcon');
+  var textEl=document.getElementById('aiwVoiceText');
+  var input=document.getElementById('aiwVoiceInput');
+  aiwRecognition.onstart=function(){
+    aiwVoiceListening=true;
+    if(icon){icon.classList.add('listening');icon.textContent='🔴';}
+    if(textEl)textEl.textContent='正在聆听...请说出指令';
+  };
+  aiwRecognition.onresult=function(e){
+    var transcript='';
+    for(var i=0;i<e.results.length;i++){transcript+=e.results[i][0].transcript;}
+    if(input)input.value=transcript;
+    if(textEl)textEl.textContent='识别到：'+transcript;
+  };
+  aiwRecognition.onerror=function(e){
+    if(textEl)textEl.textContent='语音识别失败：'+e.error;
+  };
+  aiwRecognition.onend=function(){
+    aiwVoiceListening=false;
+    if(icon){icon.classList.remove('listening');icon.textContent='🎙️';}
+    if(textEl)textEl.textContent='点击麦克风或输入指令，语音控制AI员工工作';
+    // 自动执行
+    if(input&&input.value.trim()){
+      aiwExecuteCommand(input.value);
+    }
+  };
+  aiwRecognition.start();
+}
+
+function aiwExecuteCommand(cmd){
+  if(!cmd||!cmd.trim())return;
+  cmd=cmd.trim();
+  document.getElementById('aiwVoiceInput').value='';
+  var lower=cmd.toLowerCase();
+  // 指令匹配
+  if(lower.indexOf('创作')>=0||lower.indexOf('写视频')>=0||lower.indexOf('做视频')>=0){
+    aiwSwitchTab('create');
+    aiwCreateVideos();
+  }else if(lower.indexOf('发布')>=0||lower.indexOf('分发')>=0){
+    aiwSwitchTab('distribute');
+    aiwPublishAll();
+  }else if(lower.indexOf('获客')>=0||lower.indexOf('同城')>=0||lower.indexOf('引流')>=0){
+    aiwSwitchTab('local');
+    aiwStartLocalReach();
+  }else if(lower.indexOf('客服')>=0||lower.indexOf('回复')>=0){
+    aiwSwitchTab('service');
+    if(!aiwServiceActive)aiwToggleService();
+  }else if(lower.indexOf('数据')>=0||lower.indexOf('复盘')>=0||lower.indexOf('报告')>=0){
+    aiwSwitchTab('dashboard');
+    aiwGenReport();
+  }else if(lower.indexOf('关键词')>=0){
+    aiwSwitchTab('local');
+    aiwGenGeoKeywords();
+  }else{
+    alert('收到指令：'+cmd+'\n\n支持的语音指令：\n• "创作视频" - 批量创作短视频\n• "发布" - 多平台分发\n• "同城获客" - 启动获客\n• "启动客服" - 智能客服\n• "生成报告" - 数据复盘');
+  }
+}
+
 function startLiveProject(){
   // AI真人短剧：选择单集还是多集连载
   var choice=prompt('AI真人短剧工作流\n\n请选择：\n1 = 单集项目（快速试做一集）\n2 = 多集连载（批量生产，自由选集数）\n\n输入 1 或 2：','2');
@@ -3271,15 +3990,73 @@ function dismissDispatchToast(){
 // ===== 代理服务器检测 =====
 var proxyAvailable=false;
 var proxyConfiguredProviders={};
+
+function getProxyUrl(){
+  try{return localStorage.getItem('manga_proxy_url')||'';}catch(e){return '';}
+}
+function proxyApi(path){
+  var base=getProxyUrl();
+  if(base){
+    return base.replace(/\/$/,'')+path;
+  }
+  return path;
+}
+function saveProxyUrl(){
+  var input=document.getElementById('proxyUrlInput');
+  if(!input)return;
+  var url=input.value.trim().replace(/\/$/,'');
+  try{
+    if(url){
+      localStorage.setItem('manga_proxy_url',url);
+    }else{
+      localStorage.removeItem('manga_proxy_url');
+    }
+  }catch(e){}
+  alert(url?'代理地址已保存：'+url:'已清除代理地址，将使用本地代理或直连模式');
+  detectProxy();
+}
+function clearProxyUrl(){
+  try{localStorage.removeItem('manga_proxy_url');}catch(e){}
+  var input=document.getElementById('proxyUrlInput');
+  if(input)input.value='';
+  var result=document.getElementById('proxyTestResult');
+  if(result)result.innerHTML='';
+  alert('已清除代理地址');
+  detectProxy();
+}
+async function testProxyUrl(){
+  var input=document.getElementById('proxyUrlInput');
+  var result=document.getElementById('proxyTestResult');
+  if(!input||!result)return;
+  var url=input.value.trim().replace(/\/$/,'');
+  if(!url){
+    result.innerHTML='<span style="color:var(--red)">请先输入代理地址</span>';
+    return;
+  }
+  result.innerHTML='<span style="color:var(--text-dim)">正在测试连接...</span>';
+  try{
+    var resp=await fetch(url+'/api/health',{method:'GET'});
+    if(resp.ok){
+      var data=await resp.json();
+      result.innerHTML='<span style="color:var(--green)">✅ 连接成功！</span><br>已配置平台：'+(data.configuredProviders||[]).join(', ');
+      try{localStorage.setItem('manga_proxy_url',url);}catch(e){}
+      detectProxy();
+    }else{
+      result.innerHTML='<span style="color:var(--red)">❌ 连接失败：HTTP '+resp.status+'</span>';
+    }
+  }catch(e){
+    result.innerHTML='<span style="color:var(--red)">❌ 连接失败：'+e.message+'</span><br><span style="color:var(--text-dim);font-size:11px">请确认代理服务器已启动且地址正确</span>';
+  }
+}
 async function detectProxy(){
   try{
-    var resp=await fetch('/api/health',{method:'GET',timeout:2000});
+    var resp=await fetch(proxyApi('/api/health'),{method:'GET'});
     if(resp.ok){
       var data=await resp.json();
       proxyAvailable=true;
       // 获取已配置的平台列表
       try{
-        var pResp=await fetch('/api/providers');
+        var pResp=await fetch(proxyApi('/api/providers'));
         if(pResp.ok){
           proxyConfiguredProviders=await pResp.json();
         }
@@ -3298,7 +4075,7 @@ async function callLLMStream(messages,llmConfig,onChunk){
   // 如果代理服务器可用，优先走代理（密钥在服务器端，不暴露给浏览器）
   if(proxyAvailable){
     var model=llmConfig.model||(LLM_PROVIDERS[llmConfig.provider]?LLM_PROVIDERS[llmConfig.provider].defaultModel:'');
-    var resp=await fetch('/api/chat',{
+    var resp=await fetch(proxyApi('/api/chat'),{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -4284,7 +5061,37 @@ async function getActiveLLMConfig(){
 
 // 调用图像生成API（多平台支持）
 async function generateImage(prompt){
-  // 获取绘图配置
+  // 代理模式优先
+  if(proxyAvailable){
+    var k={};
+    try{k=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
+    var imgProvider=(k.image&&k.image.provider)?k.image.provider:'siliconflow';
+    var imgModel=(k.image&&k.image.model)?k.image.model:'Kwai-Kolors/Kolors';
+    var resp=await fetch(proxyApi('/api/image'),{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        provider:imgProvider,
+        prompt:prompt,
+        model:imgModel,
+        width:1024,
+        height:1024,
+        num_images:1
+      })
+    });
+    if(!resp.ok){
+      var t=await resp.text();
+      var err={};try{err=JSON.parse(t);}catch(e){}
+      throw new Error(err.error||err.message||('HTTP '+resp.status+': '+t.substring(0,300)));
+    }
+    var data=await resp.json();
+    if(data.images&&data.images[0]&&data.images[0].url)return data.images[0].url;
+    if(data.data&&data.data[0]&&data.data[0].url)return data.data[0].url;
+    if(data.url)return data.url;
+    throw new Error('代理返回的图片数据格式异常');
+  }
+
+  // 直连模式
   var k={};
   try{k=JSON.parse(localStorage.getItem('manga_api_keys')||'{}');}catch(e){}
   
@@ -4294,7 +5101,7 @@ async function generateImage(prompt){
   var imgModelSel=(k.image&&k.image.model)?k.image.model:'Kwai-Kolors/Kolors';
   
   if(!imgKey){
-    throw new Error('未配置绘图API密钥。请点击🔑设置，在AI绘图中填入硅基流动API Key（与聊天密钥相同）');
+    throw new Error('未配置绘图API密钥。请点击🔑设置，在AI绘图中填入硅基流动API Key，或在设置中配置代理服务器');
   }
   
   // 各平台API配置
